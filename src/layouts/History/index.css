@@ -1,0 +1,36 @@
+#wrapper{
+    margin-left: 10%;
+}
+@media screen and (max-width: 1280px) {
+    #wrapper{
+        margin-left: 5%;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    #wrapper{
+        margin-left: 24%;
+    }
+}
+@media screen and (max-width: 800px) {
+    #wrapper{
+        margin-left: 20%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #wrapper{
+        margin-left:13%;
+    }
+}
+@media screen and (max-width: 500px) {
+    #wrapper{
+        margin-left: 2%;
+    }
+}
+@media screen and (max-width: 400px) {
+    #wrapper{
+        margin-left: 1%;
+    }
+}
+

@@ -1,0 +1,11 @@
+#plyer{
+    width: "50%";
+    margin-left: '5%';
+    background-color:rgba(0, 0, 0, 0)
+}
+#CommentInput:focus{
+    outline: none;
+    color: #2196F3;
+   border-color:#2196F3 ;
+   border-width:2px ;
+}
