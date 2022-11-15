@@ -1,19 +1,4 @@
-/**
-=========================================================
-* Soft UI Dashboard React - v4.0.0
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
 import Grid from "@mui/material/Grid";
 //import Icon from "@mui/material/Icon";
 
@@ -25,6 +10,8 @@ import SoftBox from "components/SoftBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import axios from 'axios'
+
 
 //import MiniStatisticsCard from "examples/Cards/StatisticsCards/MiniStatisticsCard";
 //import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
@@ -35,37 +22,23 @@ import { useState, useEffect,useRef } from 'react'
 import { useScroll } from "framer-motion"
 import useFetch from "react-fetch-hook";
 import "./index.css";
-//import GradientLineChart from "examples/Charts/LineCharts/GradientLineChart";
 
-// Soft UI Dashboard React base styles
-//import typography from "assets/theme/base/typography";
-
-// Dashboard layout components
-//import BuildByDevelopers from "layouts/dashboard/components/BuildByDevelopers";
-//import WorkWithTheRockets from "layouts/dashboard/components/WorkWithTheRockets";
-//import Projects from "layouts/dashboard/components/Projects";
-//import OrderOverview from "layouts/dashboard/components/OrderOverview";
-
-// Data
-
-//import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function Dashboard() {
   let BackendProxy='http://localhost:3001'
   const [userData,setUserData]=useState()
   
   useEffect(()=>{
-    fetch("/api",{
-      method:'GET',
-      credentials : 'include',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    axios.get(BackendProxy+'/api',{withCredentials:true})
+    .then(function (response) {
+      setUserData(response.data);
+
     })
-    .then((results)=>{return results.json()})
-    .then((results)=>{setUserData(results);})
-  });
+    .catch(function (error) {
+      console.error(error);
+    },[]);
+    
+  },[]);
   const jk=useFetch(BackendProxy+"/api/Content")
   const { scrollY } = useScroll()
   const [content, setContent] = useState([])

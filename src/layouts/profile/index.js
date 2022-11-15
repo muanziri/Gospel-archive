@@ -54,7 +54,6 @@ function Overview() {
     axios.get(BackendProxy+'/api',{withCredentials:true})
     .then(function (response) {
       setUserData(response.data);
-      
     })
     .catch(function (error) {
       console.error(error);
@@ -114,10 +113,19 @@ const content=InitContent.data
       }
     };
     const videoChange = (e) => {
+      const videoSizeKylobyte=document.getElementById('VideoInput').files[0].size/ 1024;
+      const videoSize=videoSizeKylobyte/1000
+      const videoType=document.getElementById('VideoInput').files[0].type;
+      if(videoType == 'video/mp4' &&videoSize < 100 )
+      {console.log(videoSize,videoType)
+        if(document.getElementById('warningMessage').style.display='block'){document.getElementById('warningMessage').style.display='none'}
       if (e.target.files && e.target.files.length > 0) {
         setselectedVideo(e.target.files[0]);
         document.getElementById("nameOfSelectedVideo").innerHTML=e.target.files[0].name
 
+      }}else{
+        document.getElementById('warningMessage').style.display='block';
+        document.getElementById('VideoInput').value=null;
       }
     };
  const redirectFunc =(e)=>{
@@ -305,6 +313,7 @@ const content=InitContent.data
                 <label><h3><b>Upload New  Content</b></h3></label>
                 <br/>
                 <label><b>New Video </b></label>
+                <h4 id='warningMessage' style={{color:'white',backgroundColor:'#FFEB3B',display:'none'}} >Your video content must not exceed 100 megabytes and it should be in mp4 format or webm format</h4>
                 {selectedVideo &&  <div id='addition'><video id='videoPreveiw' src={URL.createObjectURL(selectedVideo)} style={{display:'block',width:'300px',height:'150px'}} controls></video></div> }
                 <center><h4 id='nameOfSelectedVideo'></h4></center>
                 <input required accept='video/*' onChange={videoChange} id='VideoInput' name="Video" className="w3-input  w3-margin-bottom " style={{ width: '121px', border:'none' }} type="file" />
@@ -355,13 +364,13 @@ const content=InitContent.data
     </DashboardLayout>
   );}else{
     <DashboardLayout>
-       <img style={{ width: "50%" }} src={loading}></img>
+      <center><img style={{ width: "20%" }} src={loading}></img></center>
         <Footer />
       </DashboardLayout>
   }}else{
     return (
       <DashboardLayout>
-        <img style={{ width: "50%" }} src={loading}></img>
+        <center><img style={{ width: "20%" }} src={loading}></img></center>
         <Footer />
       </DashboardLayout>
     );

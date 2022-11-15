@@ -30,16 +30,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 //import Toolbar from "@mui/material/Toolbar"
 import Footer from "examples/Footer";
-
-//import {
-//  navbar,
-//  navbarContainer,
-//  navbarRow,
-//  navbarIconButton,
-//  navbarMobileMenu,
-//} from "examples/Navbars/DashboardNavbar/styles"
-//import MiniStatisticsCard from "examples/Cards/StatisticsCards/MiniStatisticsCard";
-//import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
+import axios from 'axios'
 
 import React, { useState, useEffect } from "react";
 import useFetch from "react-fetch-hook";
@@ -74,6 +65,16 @@ import { Window } from "@mui/icons-material";
 //import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function VideoPlayer({ likes, followers, views }) {
+  const [userData,setUserData]=useState();
+  useEffect(()=>{
+    axios.get(BackendProxy+'/api',{withCredentials:true})
+    .then(function (response) {
+      setUserData(response.data);
+    
+    })
+    .catch(function (error) {
+      console.error(error);
+    });},[])
   let BackendProxy='http://localhost:3001'
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
@@ -103,9 +104,7 @@ function VideoPlayer({ likes, followers, views }) {
 
   const CommentsDisplay = [];
   const ActualComments = [];
-  const hello = useFetch("/api");
   const comment = useFetch(BackendProxy+"/api/commentPool");
-  const userData = hello.data;
   const comments = comment.data;
   const playerRef = React.useRef(null);
   let theUrl = "https://drive.google.com/uc?export=download&id=";

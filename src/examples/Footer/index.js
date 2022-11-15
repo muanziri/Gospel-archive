@@ -28,6 +28,19 @@ import SoftTypography from "components/SoftTypography";
 import typography from "assets/theme/base/typography";
 
 function Footer() {
+  let WindowWidth = window.innerWidth;
+  let SizeStyle;
+  if (WindowWidth < 500) {
+    SizeStyle={width:'90%',position:'absolute',right:'5%' ,top:'22%' }
+  }else if(
+    WindowWidth < 900
+  ){
+    SizeStyle={width:'60%',position:'absolute',right:'10%' }
+  }else if(
+    WindowWidth > 900
+  ){
+    SizeStyle={width:'60%',position:'absolute',right:'10%' }
+  }
   const displayTerms=()=>{
    document.getElementById('termsConditions').style.display='block'
   }
@@ -48,10 +61,10 @@ function Footer() {
   }
   return (<>
   <div id="termsConditions" class="w3-modal ">
-  <div style={{width:'60%',position:'absolute',right:'10%'}} class=" w3-card w3-white w3-round w3-animate-zoom">
+  <div style={SizeStyle} class=" w3-card w3-white w3-round w3-animate-zoom">
   
   <center>
-    <header style={{backgroundColor:'#17C1E8',width:'100%',color:'white',position:'absolute',left:'0%',top:'-1'}}>
+    <header style={{backgroundColor:'#17C1E8',width:'100%',color:'white',position:'absolute',left:'0%',top:'-2%',marginBottom:'100%'}}>
     <span
               onClick={closeTerms}
               className="w3-button w3-xlarge w3-hover-black w3-display-topright"
@@ -112,10 +125,10 @@ function Footer() {
   </div>
  </div>
   <div id="PrivatePolicy" class="w3-modal ">
-  <div style={{width:'60%',position:'absolute',right:'10%'}} class=" w3-card w3-white w3-round w3-animate-zoom">
+  <div style={SizeStyle} class=" w3-card w3-white w3-round w3-animate-zoom">
   
   <center>
-    <header style={{backgroundColor:'#17C1E8',width:'100%',color:'white',position:'absolute',left:'0%',top:'-1'}}>
+    <header style={{backgroundColor:'#17C1E8',width:'100%',color:'white',position:'absolute',left:'0%',top:'-2%'}}>
     <span
               onClick={closePrivate}
               className="w3-button w3-xlarge w3-hover-black w3-display-topright"
@@ -210,10 +223,10 @@ function Footer() {
   </div>
  </div>
  <div id="AboutUs" class="w3-modal ">
-  <div style={{width:'60%',position:'absolute',right:'10%' }} class=" w3-card w3-white w3-round w3-animate-zoom">
+  <div style={SizeStyle} class=" w3-card w3-white w3-round w3-animate-zoom">
   
   <center>
-    <header style={{backgroundColor:'#17C1E8',width:'100%',color:'white',position:'absolute',left:'0%',top:'-1'}}>
+    <header style={{backgroundColor:'#17C1E8',width:'100%',color:'white',position:'absolute',left:'0%',top:'-2%'}}>
     <span
               onClick={closeAbout}
               className="w3-button w3-xlarge w3-hover-black w3-display-topright"

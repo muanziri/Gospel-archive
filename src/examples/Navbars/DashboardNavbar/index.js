@@ -60,10 +60,10 @@ import {
   setOpenConfigurator,
 } from "context";
 function DashboardNavbar({ absolute, light, isMini }) {
-  
+
   let BackendProxy='http://localhost:3001'
-  
-  const [userData,setUserData]=useState()
+  let contenta;
+  const [userData,setUserData]=useState();
   useEffect(()=>{
     axios.get(BackendProxy+'/api',{withCredentials:true})
     .then(function (response) {
@@ -73,26 +73,57 @@ function DashboardNavbar({ absolute, light, isMini }) {
       // console.log(error);
     });
     fetch(BackendProxy+"/api",{
-      
+
       method:'GET',
       credentials : 'include',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
       }
-      
+
     })
     .then((results)=>{
       return results.json()
     })
-    .then((results)=>{setUserData(results); 
+    .then((results)=>{setUserData(results);
     })
   },[]);
-   
   let initialUrl=window.location.href+'/VideoPlayer/';
+  const searchFunction=()=>{
+     var formData = new FormData();
+        formData.append('payload', document.getElementById('myInput').value);
+   //console.log(JSON.stringify({payload:document.getElementById('myInput').value}))
+    fetch(BackendProxy+'/api/search',{
+      method:'POST',
+       mode: 'cors',
+      body:formData
+    }).then(res=> res.json()).then((response)=>{
+      if(response.length>0)
+      { contenta=response
+      contenta.forEach(element => {
+        let newLi=document.createElement('li'); 
+        let aEl=document.createElement('a')
+        newLi.className="w3-hover-white ";
+        aEl.href=initialUrl+element.VideoId;
+        aEl.innerText=element.Title;
+        newLi.appendChild(aEl);
+       
+        if(document.getElementById('myInput').value == "")
+        {
+          document.getElementById('myUL').innerHTML=""
+        }else{
+          document.getElementById('myUL').appendChild(newLi)
+        }
+      });
+      }//{document.getElementById('myUL').innerHtml=response.map(<center> <li className="w3-hover-white "><a href={initialUrl+response.VideoId}><b>{response.Title}</b></a></li></center>)
+    })
+
+  }
+
+
  const {data} = useFetch(BackendProxy+"/api/Content");
 const content=data;
-  
+
   const Notif = useFetch(BackendProxy+"/api/notification");
   const notifications= Notif.data;
   const [navbarType, setNavbarType] = useState();
@@ -100,7 +131,7 @@ const content=data;
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
-  
+
   const [matches, setMatches] = useState(
     window.matchMedia("(min-width: 760px)").matches
   )
@@ -126,7 +157,7 @@ const content=data;
     setTimeout(()=>{
       document.getElementById('searchDisplay').style.display = 'none'
     },300)
-   
+
   }
   function SearchFilter() {
     var input, filter, ul, li, a, i, txtValue;
@@ -159,11 +190,11 @@ const content=data;
 
 
 
-    /** 
-     The event listener that's calling the handleTransparentNavbar function when 
+    /**
+     The event listener that's calling the handleTransparentNavbar function when
      scrolling the window.
     */
-   
+
     window.addEventListener("scroll", handleTransparentNavbar);
 
     // Call the handleTransparentNavbar function to set the state with the initial value.
@@ -239,51 +270,20 @@ const content=data;
               <SoftInput
                 onFocus={displaySearField}
                 onBlur={HideSearField}
-                onKeyUp={SearchFilter}
-                
+                onKeyUp={searchFunction}
+
                 id='myInput'
                 placeholder="Search for your video"
                 icon={{ component: "search", direction: "left" }}
               />
             </SoftBox>
-            {matches &&
-            (<>
-            {matched?
-            <div id='searchDisplay' style={{ position: 'absolute', width: '100%', left: '0%', top: '85%', maxHeight: '400px', backgroundColor:'rgb(23,193,232,0.7)',overflowY: 'scroll', display: 'none' }} className='w3-animate-bottom'>
-            
-            <ul  id="myUL">
-              {content?
-              content.map((element)=>
-               <center> <li className="w3-hover-white "><a href={initialUrl+element.VideoId}><b>{element.Title}</b></a></li></center>
-              )
-              :<center><li><a href="#">loading....</a></li></center>}
-            </ul>
-          </div>:
-          <div id='searchDisplay' style={{ position: 'absolute',borderBottomLeftRadius:'20px',borderBottomRightRadius:'20px',width: '100%', left: '0%', top: '85%', maxHeight: '400px', backgroundColor:'rgb(23,193,232,0.7)',overflowY: 'scroll', display: 'none' }} className='w3-animate-bottom'>
-            
-          <ul style={{paddingTop:'30px'}} id="myUL">
-            {content?
-            content.map((element)=>
-            <center><li style={{height:'100px',marginBottom:'10px'}} className="w3-hover-blue "><a href={initialUrl+element.ThumbnailId}><b>{element.Title}</b><img  style={{width:'100px',position:'absolute',marginBottom:'2px',right:'5px'}} src={"https://drive.google.com/uc?export=download&id="+element.VideoId}></img></a></li></center>
-            )
-            :<center><li><a href="#">loading....</a></li></center>}
-          </ul>
+            <div id='searchDisplay' style={{ position: 'absolute',borderBottomLeftRadius:'20px',borderBottomRightRadius:'20px',width: '100%', left: '0%', top: '85%', maxHeight: '400px', backgroundColor:'rgb(23,193,232,0.7)',overflowY: 'scroll', display: 'none' }} className='w3-animate-bottom'>
+
+          <center><ul style={{paddingTop:'30px'}} id="myUL">
+           
+          </ul></center>
         </div>
-          }
-            </>)
-        }
-      {!matches &&
-        (<div id='searchDisplay' style={{ position: 'absolute', width: '80%', left: '4%', top: '85%', maxHeight: '400px', backgroundColor:'rgb(23,193,232,0.7)',overflowY: 'scroll', display: 'none' }} className='w3-animate-bottom'>
-            
-        <ul id="myUL">
-          {content?
-          content.map((element)=>
-           <center> <li className="w3-hover-white"><a href={initialUrl+element.VideoId}><b>{element.Title}</b></a></li></center>
-          )
-          :<center><li><a href="#">loading....</a></li></center>}
-        </ul>
-      </div>)}
-            
+
             <SoftBox color={light ? "white" : "inherit"}>
               {userData ?
                 userData.user !== 'no user' ?
@@ -299,7 +299,7 @@ const content=data;
                       </SoftTypography>
                     </IconButton>
                   </Link> :
-                  
+
                     <IconButton onClick={OpenContentModal} sx={navbarIconButton} size="small">
                       <Icon
                         sx={({ palette: { dark, white } }) => ({
@@ -316,9 +316,9 @@ const content=data;
                         Sign in/Sign up
                       </SoftTypography>
                     </IconButton>
-                  
+
                 :
-                
+
                   <IconButton onClick={OpenContentModal} sx={navbarIconButton} size="small">
                     <Icon
                       sx={({ palette: { dark, white } }) => ({
@@ -335,7 +335,7 @@ const content=data;
                       Sign in/Sign up
                     </SoftTypography>
                   </IconButton>
-            
+
               }
 
               <IconButton
@@ -369,18 +369,18 @@ const content=data;
        <br/>
         <br/>
         <br/>
-          
-      
-          
+
+
+
         <div className="w3-modal-content w3-card-4 w3-animate-zoom w3-round" style={{ maxWidth: '600px', }}>
         <span onClick={closeContentModal} className="w3-button w3-xlarge w3-transparent w3-display-topright " >×</span>
            <div className="w3-section">
             <center>
               <h2>Continue with</h2>
               <img onClick={GoogleAuthenticate} style={{width:'20%'}}src={Google}></img>
-              <h2>or</h2>
+              {/* <h2>or</h2>
               <a onClick={FacebookAuthenticate}><i style={{fontSize:'450%',color:'#17C1E8'}} class="fa-brands fa-facebook"></i></a>
-              <br/>
+              <br/> */}
               <br/>
             </center>
            </div>

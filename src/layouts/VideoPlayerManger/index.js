@@ -251,7 +251,7 @@ const closeContentModal = () => {
       <SoftBox py={3}>
         <SoftBox mb={3}>
           <Grid container spacing={3}>
-            <Grid  style={{marginLeft:'3%',marginBottom:'3%',width:'100%'}}>
+            <Grid  style={{marginLeft:'3%',marginBottom:'3%',width:'50%'}}>
             <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
             {UserContent?<center><h3>{UserContent[0].Title}</h3></center>:<center><h3>Loading ...</h3></center>}
             </Grid>

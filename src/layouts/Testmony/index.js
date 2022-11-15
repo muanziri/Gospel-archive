@@ -33,7 +33,6 @@ import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
 import React from "react";
 import { useState, useEffect,useRef } from 'react'
 import { useScroll } from "framer-motion"
-import useFetch from "react-fetch-hook";
 import "./index.css";
 //import GradientLineChart from "examples/Charts/LineCharts/GradientLineChart";
 
