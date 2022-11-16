@@ -51,18 +51,38 @@ import "./index.css";
 //import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function MostViews() {
-  let BackendProxy='http://localhost:3001'
-  const { scrollY } = useScroll()
+
+  let BackendProxy='http://localhost:3001';
+  const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
+  const [calculation, setCalculation] = useState(1);
   const [content, setContent] = useState([])
-   useEffect(() => {
+  useEffect(() => {
+    setCount(() => count * 1);
     fetchData()
-  }, [])
- 
+  }, [count])
+    const ChangeNegative =()=>{
+    setCalculation((c) => c - 1)
+    setCount((c) => c - 1)
+    if(count >=1)
+      {document.getElementById('pageNumber').innerHTML=calculation
+
+    }else{
+        document.getElementById('changeNegativeBtn').style.display='none'
+      }
+  }
+  const ChangePagePositive =()=>{
+    setCalculation((c) => c + 1)
+    setCount((c) => c + 1)
+    document.getElementById('pageNumber').innerHTML=calculation;
+  }
   async function fetchData() {
-    let api = await fetch(BackendProxy+'/api/Content')
+    let api = await fetch(BackendProxy+'/api/Content/mostViews/'+count);
     let apijson = await api.json()
     setContent(apijson)
+    console.log(content)
   }
+ 
+
   
  // const { data } = useFetch("/api/Content");
  /// const content = data;
@@ -140,6 +160,13 @@ function MostViews() {
           </div>
         </SoftBox>
       </SoftBox>
+      <center>
+      <div >
+        <button onClick={ChangeNegative} id='changeNegativeBtn' className="w3-button w3-blue ">-</button>
+        <button id='pageNumber' className="w3-button w3-white ">{calculation}</button>
+        <button onClick={ChangePagePositive} className="w3-button w3-blue ">+</button>
+      </div>
+      </center>
       <Footer />
     </DashboardLayout>
   );

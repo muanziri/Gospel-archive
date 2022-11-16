@@ -40,7 +40,6 @@ import videojs from "video.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faDownload, faShare, faEye } from "@fortawesome/free-solid-svg-icons";
 import SoftAvatar from "components/SoftAvatar";
-import NewComment from "./components/NewComment";
 
 import { useRef } from "react";
 
@@ -48,7 +47,6 @@ import {
   useSoftUIController,
   setMiniSidenav
 } from "context";
-import { Window } from "@mui/icons-material";
 //import GradientLineChart from "examples/Charts/LineCharts/GradientLineChart";
 
 // Soft UI Dashboard React base styles
@@ -798,7 +796,7 @@ function VideoPlayer({ likes, followers, views }) {
                         width: "fit-content",
                         position:'absolute',
                         right:'3%',
-                        top:'1.5%',
+                        top:'5%',
                         border: "none",
                         marginTop: "2px",
                         paddingLeft: "2px",

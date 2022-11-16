@@ -9,32 +9,33 @@ import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
 import React, { useRef } from "react";
 import { useState, useEffect } from 'react'
 import { useScroll } from "framer-motion"
-import useFetch from "react-fetch-hook";
 import "./index.css";
 
 
 function Dashboard() {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
   let BackendProxy='http://localhost:3001'
   const { scrollY } = useScroll()
   const [content, setContent] = useState([])
    useEffect(() => {
-    setCalculation(() => count * 1);
+    setCount(() => count * 1);
     fetchData()
   }, [count])
-  const ChangeNegative =()=>{
+    const ChangeNegative =()=>{
+    setCalculation((c) => c - 1)
     setCount((c) => c - 1)
     if(count >=1)
-      {document.getElementById('pageNumber').innerHTML=count
+      {document.getElementById('pageNumber').innerHTML=calculation
 
     }else{
         document.getElementById('changeNegativeBtn').style.display='none'
       }
   }
   const ChangePagePositive =()=>{
+    setCalculation((c) => c + 1)
     setCount((c) => c + 1)
-    document.getElementById('pageNumber').innerHTML=count;
+    document.getElementById('pageNumber').innerHTML=calculation;
   }
   async function fetchData() {
     let api = await fetch(BackendProxy+'/api/Content/'+count);
@@ -124,7 +125,7 @@ function Dashboard() {
       <center>
       <div >
         <button onClick={ChangeNegative} id='changeNegativeBtn' className="w3-button w3-blue ">-</button>
-        <button id='pageNumber' className="w3-button w3-white ">{count}</button>
+        <button id='pageNumber' className="w3-button w3-white ">{calculation}</button>
         <button onClick={ChangePagePositive} className="w3-button w3-blue ">+</button>
       </div>
     </center>
