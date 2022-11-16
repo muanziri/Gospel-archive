@@ -47,7 +47,7 @@ import PlatformSettings from "layouts/profile/components/PlatformSettings";
 import AccountStatus from "layouts/profile/components/AccountStatus";
 import MonitizationSettings from "layouts/profile/components/MonitizationSetting";
 function Overview() {
-  let BackendProxy='http://localhost:3001'
+  let BackendProxy='http://10.138.0.2:3001'
   const [userData,setUserData]=useState()
   
   useEffect(()=>{

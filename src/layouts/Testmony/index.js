@@ -15,7 +15,7 @@ import "./index.css";
 function Testmony() {
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
-  let BackendProxy='http://localhost:3001'
+  let BackendProxy='http://10.138.0.2:3001'
   const [content, setContent] = useState([])
   useEffect(() => {
     setCount(() => count * 1);

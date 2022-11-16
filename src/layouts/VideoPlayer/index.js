@@ -62,7 +62,8 @@ import {
 
 //import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
-function VideoPlayer({ likes, followers, views }) {
+function VideoPlayer({ likes, followers, views }) { 
+  let BackendProxy='http://10.138.0.2:3001'
   const [userData,setUserData]=useState();
   useEffect(()=>{
     axios.get(BackendProxy+'/api',{withCredentials:true})
@@ -73,7 +74,7 @@ function VideoPlayer({ likes, followers, views }) {
     .catch(function (error) {
       console.error(error);
     });},[])
-  let BackendProxy='http://localhost:3001'
+ 
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const changeTheDateFormat = (n) => {
