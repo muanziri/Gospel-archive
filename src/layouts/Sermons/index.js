@@ -39,7 +39,7 @@ import "./index.css";
 function Sermons() {
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
-  let BackendProxy='http://10.138.0.2:3001'
+  let BackendProxy='http://34.145.74.143:3001'
   const [content, setContent] = useState([])
   
   useEffect(() => {

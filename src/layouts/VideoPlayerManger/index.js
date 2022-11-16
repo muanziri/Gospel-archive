@@ -65,7 +65,7 @@ import './index.css'
 //import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function VideoPlayerManger({ absolute, light, isMini }) {
-  let BackendProxy='http://10.138.0.2:3001'//or http://localhost:3001
+  let BackendProxy='http://34.145.74.143:3001'//or http://localhost:3001
   const [actualComments, setActualComments] = useState([]);
    const CommentsDisplay = [];
    const CommentsOnThisPost=[]

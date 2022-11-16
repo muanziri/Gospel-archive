@@ -25,7 +25,7 @@ import "./index.css";
 
 
 function Dashboard() {
-  let BackendProxy='http://10.138.0.2:3001'
+  let BackendProxy='http://34.145.74.143:3001'
   const [userData,setUserData]=useState()
   
   useEffect(()=>{

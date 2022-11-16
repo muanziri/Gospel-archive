@@ -61,7 +61,7 @@ import {
 } from "context";
 function DashboardNavbar({ absolute, light, isMini }) {
 
-  let BackendProxy='http://10.138.0.2:3001'
+  let BackendProxy='http://34.145.74.143:3001'
   let contenta;
   const [userData,setUserData]=useState();
   useEffect(()=>{
