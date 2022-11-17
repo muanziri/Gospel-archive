@@ -63,6 +63,8 @@ import {
 //import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function VideoPlayer({ likes, followers, views }) { 
+  const [count,setCount]=useState(Math.floor(Math.random() * 2)+1)
+  const [content,setContent]=useState()
   let BackendProxy='http://34.145.74.143:3001'
   const [userData,setUserData]=useState();
   useEffect(()=>{
@@ -98,8 +100,17 @@ function VideoPlayer({ likes, followers, views }) {
     let apijson = await api.json();
     setActualComments(apijson);
   }
-  let contentPool = useFetch(BackendProxy+"/api/Content");
-  let content = contentPool.data;
+  useEffect(() => {
+    setCount(() => count * 1);
+    fetchData()
+  }, [count])
+  async function fetchData() {
+    let api = await fetch(BackendProxy+'/api/Content/'+count);
+    let apijson = await api.json()
+    setContent(apijson)
+   
+  }
+ 
 
   const CommentsDisplay = [];
   const ActualComments = [];
