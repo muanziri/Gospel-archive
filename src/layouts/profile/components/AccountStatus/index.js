@@ -18,12 +18,35 @@ import { useState } from "react";
 // @mui material components
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
+import backendProxy from 'BackendProxy';
+import { Navigate } from "react-router-dom"
+
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 
 function AccountStatus({views,likes}) {
+  function logout(){
+    document.getElementById('logout').innerText='logging out';
+    document.getElementById('logout').disabled=true;
+    fetch(backendProxy + "/api/logout", {
+      method: "POST",
+      mode: "cors",
+      credentials: 'include',
+      "content-type": "application/x-www-form-urlencoded",
+      body: new URLSearchParams({
+        status: "logging out"
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response)
+        if(response.ActivateResponce ){
+        window.location.reload()
+        }
+      });
+  }
   
   return (
     <Card>
@@ -47,7 +70,7 @@ function AccountStatus({views,likes}) {
             </SoftTypography>
           </SoftBox>
         </SoftBox>
-        
+        <button onClick={logout} id='logout' className="w3-button w3-blue w3-margin">Click to logout</button>
        
         
       </SoftBox>
