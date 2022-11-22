@@ -24,7 +24,7 @@ import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import loading from "assets/images/Loading_2.gif";
 import Logo from "assets/images/logo67.png";
-
+import backendProxy from "BackendProxy";
 // Soft UI Dashboard React examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -65,10 +65,10 @@ import {
 function VideoPlayer({ likes, followers, views }) { 
   const [count,setCount]=useState(Math.floor(Math.random() * 2)+1)
   const [content,setContent]=useState()
-  let BackendProxy='http://34.145.74.143:3001'
+  //let backendProxy='http://34.145.74.143:3001'
   const [userData,setUserData]=useState();
   useEffect(()=>{
-    axios.get(BackendProxy+'/api',{withCredentials:true})
+    axios.get(backendProxy+'/api',{withCredentials:true})
     .then(function (response) {
       setUserData(response.data);
     
@@ -96,7 +96,7 @@ function VideoPlayer({ likes, followers, views }) {
     fetchData();
   }, []);
   async function fetchData() {
-    let api = await fetch(BackendProxy+"/api/commentPool");
+    let api = await fetch(backendProxy+"/api/commentPool");
     let apijson = await api.json();
     setActualComments(apijson);
   }
@@ -105,7 +105,7 @@ function VideoPlayer({ likes, followers, views }) {
     fetchData()
   }, [count])
   async function fetchData() {
-    let api = await fetch(BackendProxy+'/api/Content/'+count);
+    let api = await fetch(backendProxy+'/api/Content/'+count);
     let apijson = await api.json()
     setContent(apijson)
    
@@ -114,7 +114,7 @@ function VideoPlayer({ likes, followers, views }) {
 
   const CommentsDisplay = [];
   const ActualComments = [];
-  const comment = useFetch(BackendProxy+"/api/commentPool");
+  const comment = useFetch(backendProxy+"/api/commentPool");
   const comments = comment.data;
   const playerRef = React.useRef(null);
   let theUrl = "https://drive.google.com/uc?export=download&id=";
@@ -273,7 +273,7 @@ function VideoPlayer({ likes, followers, views }) {
         NewFormData.append("FolderId", userData.user.folderId);
         NewFormData.append("videoId", id);
 
-        xhr.open("POST", BackendProxy+"/api/addLike");
+        xhr.open("POST", backendProxy+"/api/addLike");
         xhr.send(NewFormData);
       } else {
         alert("you are not logged in");
@@ -290,7 +290,7 @@ function VideoPlayer({ likes, followers, views }) {
     var xhr = new XMLHttpRequest();
     NewFormData.append("videoId", id);
 
-    xhr.open("POST", BackendProxy+"/api/addViews");
+    xhr.open("POST", backendProxy+"/api/addViews");
     xhr.send(NewFormData);
   };
   const sharePopUp = () => {
@@ -318,7 +318,7 @@ function VideoPlayer({ likes, followers, views }) {
     NewFormData.append("comment", document.getElementById("CommentInput").value);
 
     // NewFormData.append('user',JSON.stringify(userData))
-    xhr.open("POST", BackendProxy+"/api/addComment");
+    xhr.open("POST", backendProxy+"/api/addComment");
     xhr.send(NewFormData);
   };
   const postCrypto = (e) => {
@@ -374,7 +374,7 @@ function VideoPlayer({ likes, followers, views }) {
           NewFormData.append("userProfile", userData.user.ProfilePhotoUrl);
           NewFormData.append("UserName", userData.user.userName);
 
-          xhr.open("POST", BackendProxy+"/api/addComment");
+          xhr.open("POST", backendProxy+"/api/addComment");
           xhr.send(NewFormData);
         } else {
           alert("you are not logged in");
@@ -389,7 +389,7 @@ function VideoPlayer({ likes, followers, views }) {
     var NewFormData = new FormData();
     var xhr = new XMLHttpRequest();
     NewFormData.append("comment", document.getElementById("CommentInput2").value);
-    xhr.open("POST", BackendProxy+"/api/addComment");
+    xhr.open("POST", backendProxy+"/api/addComment");
     xhr.send(NewFormData);
   };
 
@@ -946,7 +946,7 @@ function VideoPlayer({ likes, followers, views }) {
                       <b>Support this Channel</b>
                     </h4>
                     <br />
-                    <form id="amountMoney" action={BackendProxy+"/api/paypal"} method="post">
+                    <form id="amountMoney" action={backendProxy+"/api/paypal"} method="post">
                       <input
                         style={{ width: "60%", display: "none" }}
                         name="IdOfTheSupporter"

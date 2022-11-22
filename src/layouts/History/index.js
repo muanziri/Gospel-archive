@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
+import backendProxy from "BackendProxy";
 //import SoftTypography from "components/SoftTypography";
 
 // Soft UI Dashboard React examples
@@ -25,11 +26,11 @@ import "./index.css";
 
 
 function Dashboard() {
-  let BackendProxy='http://34.145.74.143:3001'
+ // let backendProxy='http://34.145.74.143:3001'
   const [userData,setUserData]=useState()
   
   useEffect(()=>{
-    axios.get(BackendProxy+'/api',{withCredentials:true})
+    axios.get(backendProxy+'/api',{withCredentials:true})
     .then(function (response) {
       setUserData(response.data);
 
@@ -39,7 +40,7 @@ function Dashboard() {
     },[]);
     
   },[]);
-  const jk=useFetch(BackendProxy+"/api/Content")
+  const jk=useFetch(backendProxy+"/api/Content")
   const { scrollY } = useScroll()
   const [content, setContent] = useState([])
   let currentHistoryInit=[]

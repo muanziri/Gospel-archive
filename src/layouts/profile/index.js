@@ -15,6 +15,7 @@ Coded by www.creative-tim.com
 import {useEffect,useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
+import backendProxy from 'BackendProxy';
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -47,26 +48,66 @@ import PlatformSettings from "layouts/profile/components/PlatformSettings";
 import AccountStatus from "layouts/profile/components/AccountStatus";
 import MonitizationSettings from "layouts/profile/components/MonitizationSetting";
 function Overview() {
-  let BackendProxy='http://34.145.74.143:3001'
+ // let backendProxy='http://34.145.74.143:3001'
   const [userData,setUserData]=useState()
   
   useEffect(()=>{
-    axios.get(BackendProxy+'/api',{withCredentials:true})
+    axios.get(backendProxy+'/api',{withCredentials:true})
     .then(function (response) {
       setUserData(response.data);
+     
     })
     .catch(function (error) {
       console.error(error);
     });
     
   },[]);
+  
+  function Activation (){
+    document.getElementById('ActivationCodeButton').innerText='wait a minute and Check your email for activation code'
+    document.getElementById('ActivationCodeButton').disabled=true
+    fetch(backendProxy + "/api/authentication/ActivationCodeDonation", {
+      method: "POST",
+      mode: "cors",
+      credentials: 'include',
+      "content-type": "application/x-www-form-urlencoded",
+      body: new URLSearchParams({
+        Email: userData.user.Email,
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        //console.log(response);
+        if(response.successresetResponce){
+          document.getElementById('AccActivationPortal').style.display='none'
+          document.getElementById('AccActivationCheck').style.display='block'
+        }
+      });
+  }
+  function ActivationCheck (){
+  
+    document.getElementById('ActivationCodeButtonProcceed').innerText='wait a minute'
+    let ActualActivationCode=document.getElementById('ActualActivationCode').value
+    fetch(backendProxy + "/api/CheckActivationCode", {
+      method: "POST",
+      mode: "cors",
+      credentials: 'include',
+      "content-type": "application/x-www-form-urlencoded",
+      body: new URLSearchParams({
+        TheCode: ActualActivationCode
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if(response.ActivateResponce == 'successfull Activated'){
+          document.getElementById('AccActivationModel').style.display='none'
+        }
+      });
+  }
 let UserContent=[]
-const InitContent = useFetch(BackendProxy+"/api/Content");
+const InitContent = useFetch(backendProxy+"/api/Content");
 const content=InitContent.data
   const navigate = useNavigate();
-  const FlashMessagesUser = useFetch(BackendProxy+"/api/FlashMessagesUser");
- 
-  let authChecker=FlashMessagesUser.data;
   const changeProfileInfo=(e)=>{
     e.preventDefault()
     var NewFormData=new FormData()
@@ -77,7 +118,7 @@ const content=InitContent.data
   NewFormData.append('ChangeName',document.getElementById('ChangeName').value)
   NewFormData.append('ChangePhone',document.getElementById('ChangePhone').value)
   NewFormData.append('userId',userData.user.folderId)
-  xhr.open('POST',BackendProxy+'/api/ChangeProfileInfo');
+  xhr.open('POST',backendProxy+'/api/ChangeProfileInfo');
   xhr.send(NewFormData);
   setTimeout(()=>{
     document.getElementById('ProfileEditor').style.display='none';
@@ -117,7 +158,7 @@ const content=InitContent.data
       const videoSize=videoSizeKylobyte/1000
       const videoType=document.getElementById('VideoInput').files[0].type;
       if(videoType == 'video/mp4' &&videoSize < 100 )
-      {console.log(videoSize,videoType)
+      {
         if(document.getElementById('warningMessage').style.display='block'){document.getElementById('warningMessage').style.display='none'}
       if (e.target.files && e.target.files.length > 0) {
         setselectedVideo(e.target.files[0]);
@@ -140,7 +181,7 @@ const content=InitContent.data
   NewFormData.append('Category',document.getElementById('CategoryInput').value)
   NewFormData.append('Thumbnail',document.getElementById('Thumbnail').files[0])
   NewFormData.append('user',JSON.stringify(userData))
-  xhr.open('POST', BackendProxy+'/api/ToTheDrive');
+  xhr.open('POST', backendProxy+'/api/ToTheDrive');
   xhr.send(NewFormData);
   setTimeout(()=>{
     navigate('/home')
@@ -180,11 +221,12 @@ const content=InitContent.data
   const DisplayProfileEditor = () => {
     document.getElementById('ProfileEditor').style.display = 'block'
   }
-  if(authChecker && userData){
+  if(userData){
     if(userData.user){
       let Name=userData.user.userName
   return (
     <DashboardLayout>
+        
       { userData.user !== "no user"?
       <>
       <Header UserProfile={userData.user.ProfilePhotoUrl} UserName={userData.user.userName}  changeTab1={Simbi} changeTab2={SimbiL} changeTab3={SimbiLo} />
@@ -300,6 +342,17 @@ const content=InitContent.data
           </SoftBox>
         </Card>
       </SoftBox>
+      {userData.user.AccountActivated == false
+      ?<div id='AccActivationModel' style={{display:'block'}} className='w3-modal'>
+      <div id="AccActivationPortal" className="w3-modal-content w3-card-4 w3-animate-zoom" style={{marginTop:'13%',display:'block', maxWidth: '600px' }}>
+          <h1 className='w3-margin'>In favor of your security ,You need to first activate your account. Click the button bellow and get an activation code</h1>
+          <center><button id='ActivationCodeButton' onClick={Activation} style={{cursor:"pointer"}} className="w3-blue w3-hover-black w3-button w3-margin ">Click and get activation Code</button></center>
+        </div>
+        <div id='AccActivationCheck' className="w3-modal-content w3-card-4 w3-animate-left" style={{marginTop:'13%', display:'none',maxWidth: '600px' }}>
+          <input id='ActualActivationCode' placeholder='Fill in the provided Activation Code' className="w3-input w3-border w3-margin-top"/>
+          <center><button id='ActivationCodeButtonProcceed' onClick={ActivationCheck} className="w3-blue w3-button w3-margin ">Submit</button></center>
+        </div>
+      </div>:''}
 
       <div id="ContentEditor" className="w3-modal">
         <div className="w3-modal-content w3-card-4 w3-animate-zoom" style={{ maxWidth: '600px' }}>

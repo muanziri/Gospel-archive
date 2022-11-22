@@ -15,10 +15,7 @@ Coded by www.creative-tim.com
 
 // @mui material components
 import Grid from "@mui/material/Grid";
-import Icon from "@mui/material/Icon";
-import PlaceholderCard from "examples/Cards/PlaceholderCard"
-
-// Soft UI Dashboard React components
+import backendProxy from "BackendProxy";
 import SoftBox from "components/SoftBox";
 //import SoftTypography from "components/SoftTypography";
 
@@ -65,13 +62,13 @@ import './index.css'
 //import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function VideoPlayerManger({ absolute, light, isMini }) {
-  let BackendProxy='http://34.145.74.143:3001'//or http://localhost:3001
+ // let backendProxy='http://34.145.74.143:3001'//or http://localhost:3001
   const [actualComments, setActualComments] = useState([]);
    const CommentsDisplay = [];
    const CommentsOnThisPost=[]
-   let contentPool = useFetch(BackendProxy+"/api/Content");
+   let contentPool = useFetch(backendProxy+"/api/Content");
   let content = contentPool.data;
-  const comment = useFetch(BackendProxy+"/api/commentPool");
+  const comment = useFetch(backendProxy+"/api/commentPool");
   const comments = comment.data;
   let currentVideo;
  
@@ -84,7 +81,7 @@ function VideoPlayerManger({ absolute, light, isMini }) {
   }
   let { id } = useParams();
   const navigate = useNavigate();
-  const hello= useFetch(BackendProxy+"/api");
+  const hello= useFetch(backendProxy+"/api");
   const userData=hello.data;
   let UserContent;
   let WindowWidth = window.innerWidth;
@@ -113,7 +110,7 @@ function VideoPlayerManger({ absolute, light, isMini }) {
       document.getElementById('PrivacyButton').className='w3-button w3-blue w3-round w3-margin-left w3-hover-green '
       let xhttp=new  XMLHttpRequest();
       var NewFormData=new FormData()
-      xhttp.open("POST", BackendProxy+'/api/ChangePrivacy');
+      xhttp.open("POST", backendProxy+'/api/ChangePrivacy');
       NewFormData.append('thumbnailId',id)
       NewFormData.append('booleanGiven',false)
       xhttp.send(NewFormData);
@@ -121,7 +118,7 @@ function VideoPlayerManger({ absolute, light, isMini }) {
     }else{document.getElementById('PrivacyButton').innerText='Turn to public';
     let xhttp=new  XMLHttpRequest();
     var NewFormData=new FormData()
-    xhttp.open("POST", BackendProxy+'/api/ChangePrivacy');
+    xhttp.open("POST", backendProxy+'/api/ChangePrivacy');
     NewFormData.append('thumbnailId',id)
     NewFormData.append('booleanGiven',true)
     xhttp.send(NewFormData);
@@ -130,7 +127,7 @@ function VideoPlayerManger({ absolute, light, isMini }) {
   const uploadNewThumbnail=()=>{
     let xhttp=new  XMLHttpRequest();
     var NewFormData=new FormData()
-    xhttp.open("POST", BackendProxy+'/api/NewThumbnail');
+    xhttp.open("POST", backendProxy+'/api/NewThumbnail');
     NewFormData.append('thumbnailIdData',document.getElementById('file').files[0])
     NewFormData.append('thumbnailId',UserContent[0].VideoId)
     NewFormData.append('folderId',userData.user.folderId)
@@ -142,7 +139,7 @@ function VideoPlayerManger({ absolute, light, isMini }) {
       document.getElementById('CommentBTN').className='w3-button w3-blue w3-round w3-margin-left w3-hover-green '
       let xhttp=new  XMLHttpRequest();
       var NewFormData=new FormData()
-      xhttp.open("POST", BackendProxy+'/api/changeCommency');
+      xhttp.open("POST", backendProxy+'/api/changeCommency');
       NewFormData.append('thumbnailId',id)
       NewFormData.append('booleanGiven',false)
       xhttp.send(NewFormData);
@@ -151,7 +148,7 @@ function VideoPlayerManger({ absolute, light, isMini }) {
       document.getElementById('CommentBTN').innerText='Turn off comments'
       let xhttp=new  XMLHttpRequest();
       var NewFormData=new FormData()
-      xhttp.open("POST", BackendProxy+'/api/changeCommency');
+      xhttp.open("POST", backendProxy+'/api/changeCommency');
       NewFormData.append('thumbnailId',id)
       NewFormData.append('booleanGiven',true)
       xhttp.send(NewFormData);
@@ -165,7 +162,7 @@ function VideoPlayerManger({ absolute, light, isMini }) {
       document.getElementById('DownloadManupBtn').className='w3-button w3-blue w3-round w3-margin-left w3-hover-green '
       let xhttp=new  XMLHttpRequest();
       var NewFormData=new FormData()
-      xhttp.open("POST", BackendProxy+'/api/ManupulateDownloads');
+      xhttp.open("POST", backendProxy+'/api/ManupulateDownloads');
       NewFormData.append('thumbnailId',id)
       NewFormData.append('booleanGiven',false)
       xhttp.send(NewFormData);
@@ -174,7 +171,7 @@ function VideoPlayerManger({ absolute, light, isMini }) {
       document.getElementById('DownloadManupBtn').innerText='Hide download button';
       let xhttp=new  XMLHttpRequest();
       var NewFormData=new FormData()
-      xhttp.open("POST", BackendProxy+'/api/ManupulateDownloads');
+      xhttp.open("POST", backendProxy+'/api/ManupulateDownloads');
       NewFormData.append('thumbnailId',id)
       NewFormData.append('booleanGiven',true)
       xhttp.send(NewFormData);
@@ -186,7 +183,7 @@ function VideoPlayerManger({ absolute, light, isMini }) {
     document.getElementById('deleteVideoButton').disabled=true
     let xhttp=new  XMLHttpRequest();
     var NewFormData=new FormData()
-    xhttp.open("POST", BackendProxy+'/api/DeleteVideo');
+    xhttp.open("POST", backendProxy+'/api/DeleteVideo');
     NewFormData.append('thumbnailId',id)
     NewFormData.append('videoId',UserContent[0].VideoId)
     

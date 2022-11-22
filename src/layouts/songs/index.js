@@ -6,6 +6,7 @@ import SoftBox from "components/SoftBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import backendProxy from "BackendProxy";
 
 import loading from "assets/images/Loading_2.gif";
 import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
@@ -15,7 +16,7 @@ import "./index.css";
 
 
 function Songs() {
-  let BackendProxy='http://34.145.74.143:3001';
+  //let backendProxy='http://34.145.74.143:3001';
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
   const [content, setContent] = useState([])
@@ -39,7 +40,7 @@ function Songs() {
     document.getElementById('pageNumber').innerHTML=calculation;
   }
   async function fetchData() {
-    let api = await fetch(BackendProxy+'/api/Content/Songs/'+count);
+    let api = await fetch(backendProxy+'/api/Content/Songs/'+count);
     let apijson = await api.json()
     setContent(apijson)
     console.log(content)

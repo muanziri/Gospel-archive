@@ -1,5 +1,6 @@
 
 import Grid from "@mui/material/Grid";
+import backendProxy from "BackendProxy";
 import SoftBox from "components/SoftBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -15,7 +16,7 @@ import "./index.css";
 function Dashboard() {
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
-  let BackendProxy='http://34.145.74.143:3001'
+  //let backendProxy='http://34.145.74.143:3001'
   const { scrollY } = useScroll()
   const [content, setContent] = useState([])
    useEffect(() => {
@@ -38,7 +39,7 @@ function Dashboard() {
     document.getElementById('pageNumber').innerHTML=calculation;
   }
   async function fetchData() {
-    let api = await fetch(BackendProxy+'/api/Content/'+count);
+    let api = await fetch(backendProxy+'/api/Content/'+count);
     let apijson = await api.json()
     setContent(apijson)
     console.log(content)

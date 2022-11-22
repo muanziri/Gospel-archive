@@ -19,6 +19,7 @@ import Grid from "@mui/material/Grid";
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
+import backendProxy from "BackendProxy";
 //import SoftTypography from "components/SoftTypography";
 
 // Soft UI Dashboard React examples
@@ -52,7 +53,7 @@ import "./index.css";
 
 function MostViews() {
 
-  let BackendProxy='http://34.145.74.143:3001';
+  //let backendProxy='http://34.145.74.143:3001';
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
   const [content, setContent] = useState([])
@@ -76,7 +77,7 @@ function MostViews() {
     document.getElementById('pageNumber').innerHTML=calculation;
   }
   async function fetchData() {
-    let api = await fetch(BackendProxy+'/api/Content/mostViews/'+count);
+    let api = await fetch(backendProxy+'/api/Content/mostViews/'+count);
     let apijson = await api.json()
     setContent(apijson)
     console.log(content)

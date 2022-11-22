@@ -25,21 +25,20 @@ import SoftBox from "components/SoftBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-
+import backendProxy from "BackendProxy";
 //import MiniStatisticsCard from "examples/Cards/StatisticsCards/MiniStatisticsCard";
 //import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
 import loading from "assets/images/Loading_2.gif";
 import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
 import React from "react";
 import { useState, useEffect,useRef } from 'react'
-import { useScroll } from "framer-motion"
-import useFetch from "react-fetch-hook";
+
 import "./index.css";
 
 function Sermons() {
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
-  let BackendProxy='http://34.145.74.143:3001'
+  //let backendProxy='http://34.145.74.143:3001'
   const [content, setContent] = useState([])
   
   useEffect(() => {
@@ -62,7 +61,7 @@ function Sermons() {
     document.getElementById('pageNumber').innerHTML=calculation;
   }
   async function fetchData() {
-    let api = await fetch(BackendProxy+'/api/Content/Sermons/'+count);
+    let api = await fetch(backendProxy+'/api/Content/Sermons/'+count);
     let apijson = await api.json()
     setContent(apijson)
     console.log(content)

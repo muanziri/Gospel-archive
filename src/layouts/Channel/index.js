@@ -20,7 +20,7 @@ import Card from "@mui/material/Card";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import VideoDispalyerChannel from "examples/Cards/BlogCards/VideoDispalyerChannel"
 
-
+import backendProxy from 'BackendProxy';
 
 // @mui icons
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -49,14 +49,14 @@ import AccountStatus from "layouts/Channel/components/AccountStatus";
 
 
 function Overview() {
-  let BackendProxy='http://34.145.74.143:3001'
+ // let backendProxy='http://34.145.74.143:3001'
   let UserContent=[]
   let ChannelOwner;
   let { id } = useParams();
-const InitContent = useFetch(BackendProxy+"/api/Content");
+const InitContent = useFetch(backendProxy+"/api/Content");
 const content=InitContent.data
-  const hello= useFetch(BackendProxy+"/api");
-  const Users= useFetch(BackendProxy+"/api/user");
+  const hello= useFetch(backendProxy+"/api");
+  const Users= useFetch(backendProxy+"/api/user");
   const userData=hello.data
   const users=Users.data
   if(content){

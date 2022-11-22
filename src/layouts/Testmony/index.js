@@ -4,6 +4,7 @@ import SoftBox from "components/SoftBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import backendProxy from "BackendProxy";
 
 import loading from "assets/images/Loading_2.gif";
 import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
@@ -15,7 +16,7 @@ import "./index.css";
 function Testmony() {
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
-  let BackendProxy='http://34.145.74.143:3001'
+  //let backendProxy='http://34.145.74.143:3001'
   const [content, setContent] = useState([])
   useEffect(() => {
     setCount(() => count * 1);
@@ -37,7 +38,7 @@ function Testmony() {
     document.getElementById('pageNumber').innerHTML=calculation;
   }
   async function fetchData() {
-    let api = await fetch(BackendProxy+'/api/Content/testmonies/'+count);
+    let api = await fetch(backendProxy+'/api/Content/testmonies/'+count);
     let apijson = await api.json()
     setContent(apijson)
     console.log(content)
