@@ -145,7 +145,8 @@ function VideoPlayer({ likes, followers, views }) {
   }
   if (content) {
     currentVideo = content.filter((videocontent) => videocontent.ThumbnailId == id);
-   
+    if(currentVideo.length>0){
+    init = 0 + currentVideo[0].Likes.length;
     if (comments) {
       let commentsIds = currentVideo[0].CommentsIds;
       CommentsDisplay.push(actualComments);
@@ -163,12 +164,7 @@ function VideoPlayer({ likes, followers, views }) {
           });
         }
       }
-    }
-  }
-  if(currentVideo){
-    if(currentVideo.length>=0){
-      init = 0 + currentVideo[0].Likes.length;
-    }
+    }}
   }
   if (WindowWidth < 500) {
     AccountInfo = { position: "absolute", top: "72%", right: "15%" };
@@ -503,20 +499,20 @@ function VideoPlayer({ likes, followers, views }) {
         {currentVideo ? (
           <>
             <SoftBox style={AvartaStyle} display="flex" alignItems="center" mt={3}>
-              <SoftAvatar src={currentVideo[0].ProfilePhotoUrl} variant="rounded" shadow="md" />
+              <SoftAvatar src={currentVideo.length>0? currentVideo[0].ProfilePhotoUrl:''} variant="rounded" shadow="md" />
               <SoftBox pl={2} lineHeight={0}>
                 <SoftTypography component="h6" variant="button" fontWeight="medium" gutterBottom>
-                  {currentVideo[0].userName}
+                  {currentVideo.length>0?currentVideo[0].userName:''}
                 </SoftTypography>
                 <SoftTypography variant="caption" color="text">
-                  {currentVideo[0].Date}
+                  {currentVideo.length>0?currentVideo[0].Date:''}
                 </SoftTypography>
               </SoftBox>
             </SoftBox>
             <SoftTypography style={AccountInfo} variant="caption" color="text">
-              <b>Views</b> <b>{currentVideo[0].Views}</b>
+              <b>Views</b> <b>{currentVideo.length>0?currentVideo[0].Views:''}</b>
               <br />
-              <b>likes</b> <b>{currentVideo[0] !== undefined?currentVideo[0].Likes.length:0}</b>
+              <b>likes</b> <b>{currentVideo.length>0?currentVideo[0].Likes.length:''}</b>
             </SoftTypography>
           </>
         ) : (
@@ -542,7 +538,7 @@ function VideoPlayer({ likes, followers, views }) {
           <div style={{ cursor: "none" }} className="w3-button  w3-white w3-round w3-margin-left">
             <FontAwesomeIcon style={{ color: "#2196F3" }} icon={faEye} /> Views
             <div id="addLike" style={{ color: "#2196F3" }}>
-              {currentVideo ? currentVideo[0].Views : "Loading ..."}
+              { currentVideo && currentVideo.length>0 ? currentVideo[0].Views : "Loading ..."}
             </div>
           </div>
           {/* <button
@@ -553,7 +549,7 @@ function VideoPlayer({ likes, followers, views }) {
                           Support
                         </button> */}
 
-          {currentVideo ? (
+          {currentVideo && currentVideo.length>0 ? (
             currentVideo[0].showDownloadButton == true ? (
               <a href={source}><button  className="w3-button w3-hover-black w3-blue w3-round w3-margin-left">
                 <FontAwesomeIcon style={{ color: "#ffff" }} icon={faDownload} />
@@ -601,7 +597,7 @@ function VideoPlayer({ likes, followers, views }) {
             </button>
             <div style={{ cursor: "none" }} className="w3-button  w3-white w3-round ">
               <FontAwesomeIcon style={{ color: "#2196F3" }} icon={faEye} /> Views
-              {currentVideo ? currentVideo[0].Views : "Loading ..."}
+              {currentVideo && currentVideo.length>0 ? currentVideo[0].Views : "Loading ..."}
             </div>
             {/* <button
                         onClick={openSupportModelPayment}
@@ -611,7 +607,7 @@ function VideoPlayer({ likes, followers, views }) {
                         Support
                       </button> */}
 
-            {currentVideo ? (
+            {currentVideo && currentVideo.length>0 ? (
               currentVideo[0].showDownloadButton == true ? (
                 <center>
                  <a href={source} className="w3-button w3-hover-black w3-blue w3-round w3-margin-left"> <button >
@@ -664,7 +660,7 @@ function VideoPlayer({ likes, followers, views }) {
               className="w3-button  w3-white w3-round w3-margin-top w3-margin-left"
             >
               <FontAwesomeIcon style={{ color: "#2196F3" }} icon={faEye} />
-              {currentVideo ? currentVideo[0].Views : "Loading ..."}
+              {currentVideo && currentVideo.length>0? currentVideo[0].Views : "Loading ..."}
             </div>
             {/* <button
                     onClick={openSupportModelPayment}
@@ -674,7 +670,7 @@ function VideoPlayer({ likes, followers, views }) {
                     Support
                   </button> */}
 
-            {currentVideo ? (
+            {currentVideo && currentVideo.length>0 ? (
               currentVideo[0].showDownloadButton == true ? (
                 <a href={source}><button className="w3-button w3-hover-black w3-blue w3-margin-top w3-round w3-margin-left">
                   <FontAwesomeIcon style={{ color: "#ffff" }} icon={faDownload} />
@@ -804,7 +800,7 @@ function VideoPlayer({ likes, followers, views }) {
             ></textarea>
             {userData ? (
               <>
-                {userData.user !== "no user" && currentVideo ? (
+                {userData.user !== "no user" && currentVideo && currentVideo.length>0 ? (
                   currentVideo[0].allowCommenting == true ? (
                     <button
                       onClick={redirectFunc}
@@ -873,7 +869,7 @@ function VideoPlayer({ likes, followers, views }) {
               style={{ height: "380px", marginTop: "-2.5%", overflowY: "scroll" }}
             >
               {CommentsOnThisPost ? (
-                currentVideo ? (
+                currentVideo && currentVideo.length>0 ? (
                   currentVideo[0].allowCommenting == true ? (
                     CommentsOnThisPost.map((element, key) => (
                       <div
@@ -976,7 +972,7 @@ function VideoPlayer({ likes, followers, views }) {
                         style={{ width: "60%", display: "none" }}
                         name="accountName"
                         value={
-                          currentVideo ? (
+                          currentVideo && currentVideo.length>0 ? (
                             currentVideo[0].userName
                           ) : (
                             <center>
@@ -1002,7 +998,7 @@ function VideoPlayer({ likes, followers, views }) {
                       <h5>
                         <b>
                           To be able to support{" "}
-                          {currentVideo ? (
+                          {currentVideo && currentVideo.length>0? (
                             currentVideo[0].userName
                           ) : (
                             <center>
