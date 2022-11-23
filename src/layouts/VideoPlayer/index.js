@@ -511,7 +511,7 @@ function VideoPlayer({ likes, followers, views }) {
             <SoftTypography style={AccountInfo} variant="caption" color="text">
               <b>Views</b> <b>{currentVideo[0].Views}</b>
               <br />
-              <b>likes</b> <b>{currentVideo[0].Likes.length}</b>
+              <b>likes</b> <b>{currentVideo[0].Likes !== undefined?currentVideo[0].Likes.length:0}</b>
             </SoftTypography>
           </>
         ) : (

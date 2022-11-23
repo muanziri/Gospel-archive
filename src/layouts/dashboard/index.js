@@ -47,25 +47,7 @@ function Dashboard() {
 
 
   
- // const { data } = useFetch("/api/Content");
- /// const content = data;
-  // const {hasMore,setHasMore}=useState(true);
-  // const {page,setPage}=useState(1);
-  //   //const { size } = typography;
-  //   //const { chart, items } = reportsBarChartData;
-  //   // const fetchMoreData = () => {
-  //   //   if (content.length >= 2) {
-  //   //     setHasMore(false);
-  //   //     return;
-  //   //   }
-  //   //   // a fake async api call like which sends
-  //   //   // 20 more records in .5 secs
-  //   //   setTimeout(() => {
-  //   //     this.setState({
-  //   //       items: this.state.items.concat(Array.from({ length: 20 }))
-  //   //     });
-  //   //   }, 500);
-  //   // };
+ 
   const changeTheDateFormat = (n) => {
     let date = new Date(n);
     let newFormat = date.toUTCString();

@@ -114,10 +114,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
         } //{document.getElementById('myUL').innerHtml=response.map(<center> <li className="w3-hover-white "><a href={initialUrl+response.VideoId}><b>{response.Title}</b></a></li></center>)
       });
   };
-
-  const { data } = useFetch(backendProxy + "/api/Content");
-  const content = data;
-
   const Notif = useFetch(backendProxy + "/api/notification");
   const notifications = Notif.data;
   const [navbarType, setNavbarType] = useState();
