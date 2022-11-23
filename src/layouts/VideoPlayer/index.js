@@ -145,7 +145,7 @@ function VideoPlayer({ likes, followers, views }) {
   }
   if (content) {
     currentVideo = content.filter((videocontent) => videocontent.ThumbnailId == id);
-    init = 0 + currentVideo[0].Likes.length;
+   
     if (comments) {
       let commentsIds = currentVideo[0].CommentsIds;
       CommentsDisplay.push(actualComments);
@@ -163,6 +163,11 @@ function VideoPlayer({ likes, followers, views }) {
           });
         }
       }
+    }
+  }
+  if(currentVideo){
+    if(currentVideo.length>=0){
+      init = 0 + currentVideo[0].Likes.length;
     }
   }
   if (WindowWidth < 500) {
@@ -511,7 +516,7 @@ function VideoPlayer({ likes, followers, views }) {
             <SoftTypography style={AccountInfo} variant="caption" color="text">
               <b>Views</b> <b>{currentVideo[0].Views}</b>
               <br />
-              <b>likes</b> <b>{currentVideo[0].Likes !== undefined?currentVideo[0].Likes.length:0}</b>
+              <b>likes</b> <b>{currentVideo[0] !== undefined?currentVideo[0].Likes.length:0}</b>
             </SoftTypography>
           </>
         ) : (
