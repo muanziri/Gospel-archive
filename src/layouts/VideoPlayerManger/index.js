@@ -248,12 +248,16 @@ const closeContentModal = () => {
       <SoftBox py={3}>
         <SoftBox mb={3}>
           <Grid container spacing={3}>
-            <Grid  style={{marginLeft:'3%',marginBottom:'3%',width:'50%'}}>
+          {WindowWidth>500?
+            <Grid  style={{marginLeft:'3%',marginBottom:'3%',width:'70%',height:'30%'}}>
             <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
             {UserContent?<center><h3>{UserContent[0].Title}</h3></center>:<center><h3>Loading ...</h3></center>}
-            </Grid>
+            </Grid>:<Grid  style={{marginLeft:'3%',marginBottom:'3%',width:'100%',height:'30%'}}>
+            <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+            {UserContent?<center><h3>{UserContent[0].Title}</h3></center>:<center><h3>Loading ...</h3></center>}
+            </Grid>}
           </Grid>
-         {WindowWidth>500? <div  style={{height:'fit-content' ,width:'18%',position:'absolute',left:'5%',top:'15%'}}>
+         {WindowWidth>500? <div  style={{height:'fit-content' ,width:'18%',position:'absolute',right:'5%',top:'15%'}}>
            
             { UserContent?UserContent.length>0?<img style={{display:'block',width:'93%'}} src={theUrl+UserContent[0].VideoId}></img>:<img style={{display:'block',width:'200px',height:'130px'}}></img>:<img style={{display:'block',width:'200px',height:'130px'}} ></img>}
             <button  className='w3-button w3-green w3-hover-light-green' onClick={DisplayContentEditor}>

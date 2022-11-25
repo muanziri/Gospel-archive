@@ -80,7 +80,7 @@ function MostViews() {
     let api = await fetch(backendProxy+'/api/Content/mostViews/'+count);
     let apijson = await api.json()
     setContent(apijson)
-    console.log(content)
+    //console.log(content)
   }
  
 

@@ -116,7 +116,7 @@ function DefaultBlogCard({ categoryName,Duration,VideoId,image, category,followe
      
   
           <SoftBox display="flex" alignItems="center" mt={3}>
-          <Link to={channelUrl}><SoftAvatar variant="rounded" src={authorImage} alt={authorName} shadow="md" /></Link>
+            <SoftAvatar variant="rounded" src={authorImage} alt={authorName} shadow="md" />
             <SoftBox pl={2} lineHeight={0}>
               <SoftTypography component="h6" variant="button" fontWeight="medium" gutterBottom>
                 {authorName}

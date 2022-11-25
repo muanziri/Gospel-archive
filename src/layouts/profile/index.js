@@ -173,7 +173,7 @@ const content=InitContent.data
   e.preventDefault()
   var NewFormData=new FormData()
   var xhr = new XMLHttpRequest();
-  document.getElementById('displayButton').innerHTML = 'Uploaded'
+  document.getElementById('displayButton').innerHTML = 'Uploading ... (This might take few minutes)'
     document.getElementById('displayButton').disabled = true
   NewFormData.append('VideoInput',document.getElementById('VideoInput').files[0])
   NewFormData.append('Title',document.getElementById('titleInput').value) 
@@ -181,11 +181,17 @@ const content=InitContent.data
   NewFormData.append('Category',document.getElementById('CategoryInput').value)
   NewFormData.append('Thumbnail',document.getElementById('Thumbnail').files[0])
   NewFormData.append('user',JSON.stringify(userData))
-  xhr.open('POST', backendProxy+'/api/ToTheDrive');
-  xhr.send(NewFormData);
-  setTimeout(()=>{
-    navigate('/home')
-  },5000)
+  fetch(backendProxy+'/api/ToTheDrive',{
+    method:'POST',
+    mode:'cors',
+    body:NewFormData
+  }).then((res)=>res.json()).then((result)=>{
+    if(result.uploadStatus == "uploaded"){
+      navigate('/home')
+    }
+  })
+  
+
 
 }
   
