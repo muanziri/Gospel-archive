@@ -35,6 +35,10 @@ import React from "react";
 import { useState, useEffect,useRef } from 'react'
 import { useScroll } from "framer-motion"
 import useFetch from "react-fetch-hook";
+import {
+  useSoftUIController,
+  setMiniSidenav
+} from "context";
 import "./index.css";
 //import GradientLineChart from "examples/Charts/LineCharts/GradientLineChart";
 
@@ -52,6 +56,19 @@ import "./index.css";
 //import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function MostViews() {
+  const [controller, dispatch] = useSoftUIController();
+  const { miniSidenav} = controller;
+  const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
+  const menuToggle =()=>{
+    document.getElementById('menuToggle').style.display='block'
+    document.getElementById('menuToggleButton').style.display='none'
+    document.getElementById('menuToggleClose').style.display='block'
+  }
+  const menuToggleClose =()=>{
+    document.getElementById('menuToggle').style.display='none'
+    document.getElementById('menuToggleButton').style.display='block'
+    document.getElementById('menuToggleClose').style.display='none'
+  }
 
   //let backendProxy='http://34.145.74.143:3001';
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
@@ -76,10 +93,14 @@ function MostViews() {
     setCount((c) => c + 1)
     document.getElementById('pageNumber').innerHTML=calculation;
   }
-  async function fetchData() {
-    let api = await fetch(backendProxy+'/api/Content/mostViews/'+count);
-    let apijson = await api.json()
+ function fetchData() {
+   fetch(backendProxy+'/api/Content/mostViews/'+count)
+   .then((api)=>api.json())
+   .then((apijson)=>{
     setContent(apijson)
+    console.log(apijson)
+  })
+    
     //console.log(content)
   }
  

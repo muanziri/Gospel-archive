@@ -59,6 +59,7 @@ import {
 } from "context";
 function DashboardNavbar({ absolute, light, isMini }) {
   //let backendProxy = "http://localhost:3001";
+  let WindowWidth = window.innerWidth;
   let contenta;
   const [userData, setUserData] = useState();
   useEffect(() => {
@@ -487,7 +488,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 </center>
               </div>
 
-              <SoftBox color={light ? "white" : "inherit"}>
+              {WindowWidth>500?<SoftBox color={light ? "white" : "inherit"}>
                 {userData ? (
                   userData.user !== "no user" ? (
                     <Link to="/profile">
@@ -566,7 +567,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   <Icon className={light ? "text-white" : "text-dark"}>notifications</Icon>
                 </IconButton>
                 {renderMenu()}
-              </SoftBox>
+              </SoftBox>:''}
             </SoftBox>
           )}
         </Toolbar>
@@ -574,7 +575,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
       
       <div id="ContentEditor1"  className="w3-modal">
      
-        <div className="w3-modal-content w3-card-4 w3-animate-zoom" style={{ maxWidth: "600px" }}>
+        <div className="w3-modal-content w3-card-4 w3-animate-zoom" style={WindowWidth<500?{ maxWidth: "600px" ,marginTop:'30%'}:{ maxWidth: "600px" ,marginTop:'0%'}}>
         <span
               className="w3-button  w3-xlarge w3-hover-red "
               title="Close Modal"

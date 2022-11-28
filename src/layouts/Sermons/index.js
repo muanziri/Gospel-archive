@@ -26,6 +26,10 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import backendProxy from "BackendProxy";
+import {
+  useSoftUIController,
+  setMiniSidenav
+} from "context";
 //import MiniStatisticsCard from "examples/Cards/StatisticsCards/MiniStatisticsCard";
 //import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
 import loading from "assets/images/Loading_2.gif";
@@ -36,6 +40,19 @@ import { useState, useEffect,useRef } from 'react'
 import "./index.css";
 
 function Sermons() {
+  const [controller, dispatch] = useSoftUIController();
+  const { miniSidenav} = controller;
+  const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
+  const menuToggle =()=>{
+    document.getElementById('menuToggle').style.display='block'
+    document.getElementById('menuToggleButton').style.display='none'
+    document.getElementById('menuToggleClose').style.display='block'
+  }
+  const menuToggleClose =()=>{
+    document.getElementById('menuToggle').style.display='none'
+    document.getElementById('menuToggleButton').style.display='block'
+    document.getElementById('menuToggleClose').style.display='none'
+  }
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
   //let backendProxy='http://34.145.74.143:3001'

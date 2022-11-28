@@ -35,6 +35,10 @@ import SoftTypography from "components/SoftTypography";
 // Soft UI Dashboard React examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import Footer from "examples/Footer";
+import {
+  useSoftUIController,
+  setMiniSidenav
+} from "context";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 
 import { useParams } from "react-router-dom";
@@ -49,7 +53,19 @@ import AccountStatus from "layouts/Channel/components/AccountStatus";
 
 
 function Overview() {
- // let backendProxy='http://34.145.74.143:3001'
+  const [controller, dispatch] = useSoftUIController();
+  const { miniSidenav} = controller;
+  const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
+  const menuToggle =()=>{
+    document.getElementById('menuToggle').style.display='block'
+    document.getElementById('menuToggleButton').style.display='none'
+    document.getElementById('menuToggleClose').style.display='block'
+  }
+  const menuToggleClose =()=>{
+    document.getElementById('menuToggle').style.display='none'
+    document.getElementById('menuToggleButton').style.display='block'
+    document.getElementById('menuToggleClose').style.display='none'
+  }
   let UserContent=[]
   let ChannelOwner;
   let { id } = useParams();

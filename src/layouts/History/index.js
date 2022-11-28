@@ -22,12 +22,29 @@ import React from "react";
 import { useState, useEffect,useRef } from 'react'
 import { useScroll } from "framer-motion"
 import useFetch from "react-fetch-hook";
+import {
+  useSoftUIController,
+  setMiniSidenav
+} from "context";
 import "./index.css";
 
 
 function Dashboard() {
- // let backendProxy='http://34.145.74.143:3001'
-  const [userData,setUserData]=useState()
+  const [controller, dispatch] = useSoftUIController();
+  const { miniSidenav} = controller;
+  const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
+  const menuToggle =()=>{
+    document.getElementById('menuToggle').style.display='block'
+    document.getElementById('menuToggleButton').style.display='none'
+    document.getElementById('menuToggleClose').style.display='block'
+  }
+  const menuToggleClose =()=>{
+    document.getElementById('menuToggle').style.display='none'
+    document.getElementById('menuToggleButton').style.display='block'
+    document.getElementById('menuToggleClose').style.display='none'
+  }
+    const [userData,setUserData]=useState()
+ 
   
   useEffect(()=>{
     axios.get(backendProxy+'/api',{withCredentials:true})
@@ -118,6 +135,19 @@ function Dashboard() {
           </div>
         </SoftBox>
       </SoftBox>
+      <div id='menuToggle' className="w3-animate-bottom" style={{width:'30px',height:'100px',display:'none',borderRadius:'2%', backgroundColor:'white', position:'fixed',bottom:'5%',right:'2.5%'}}>
+    <i style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-circle-user"></i>
+    <br/>
+    <i style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-bell"></i>
+    <br/>
+    <i onClick={handleMiniSidenav} style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-bars"></i>
+    </div>
+    <div id='menuToggleButton' onClick={menuToggle} style={{width:'30px',height:'30px',borderRadius:'50%',display:'block', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
+    <center><i style={{fontSize:'100%',margin:'2%',color:'white'}} class="fa-solid fa-ellipsis-vertical"></i></center>
+       </div>
+    <div id='menuToggleClose' onClick={menuToggleClose} style={{width:'30px',height:'30px',borderRadius:'50%',display:'none', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
+    <center><p style={{fontSize:'100%',margin:'2%',color:'white'}} > &times;</p></center>
+       </div>
       <Footer />
     </DashboardLayout>
   );}else{

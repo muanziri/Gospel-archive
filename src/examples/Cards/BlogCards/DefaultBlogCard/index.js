@@ -65,7 +65,7 @@ function DefaultBlogCard({ categoryName,Duration,VideoId,image, category,followe
       <SoftBox mt={2} mx={2}>
         <div className="container" >
        
-        <img  className="image" id='loadedImage' src={theUrl+image}  alt={loading}  style={{width:'100%',height:'250px'}}></img>
+        <img  className="image" id='loadedImage' src={theUrl+image}  alt={loading}  style={WindowWidth>500?{width:'100%',height:'200px'}:{width:'100%',height:'fit-content'}}></img>
         <div className="middle">
         <Link to={defaultRoute+VideoId}>
           

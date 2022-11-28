@@ -498,6 +498,7 @@ function VideoPlayer({ likes, followers, views }) {
         </div>}
         {currentVideo ? (
           <>
+            <h4>{currentVideo.length>0?currentVideo[0].Title:''}</h4>
             <SoftBox style={AvartaStyle} display="flex" alignItems="center" mt={3}>
               <SoftAvatar src={currentVideo.length>0? currentVideo[0].ProfilePhotoUrl:''} variant="rounded" shadow="md" />
               <SoftBox pl={2} lineHeight={0}>
@@ -511,6 +512,7 @@ function VideoPlayer({ likes, followers, views }) {
             </SoftBox>
             <SoftTypography style={AccountInfo} variant="caption" color="text">
               <b>Views</b> <b>{currentVideo.length>0?currentVideo[0].Views:''}</b>
+              
               <br />
               <b>likes</b> <b>{currentVideo.length>0?currentVideo[0].Likes.length:''}</b>
             </SoftTypography>

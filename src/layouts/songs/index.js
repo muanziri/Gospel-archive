@@ -7,6 +7,10 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import backendProxy from "BackendProxy";
+import {
+  useSoftUIController,
+  setMiniSidenav
+} from "context";
 
 import loading from "assets/images/Loading_2.gif";
 import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
@@ -16,7 +20,19 @@ import "./index.css";
 
 
 function Songs() {
-  //let backendProxy='http://34.145.74.143:3001';
+  const [controller, dispatch] = useSoftUIController();
+  const { miniSidenav} = controller;
+  const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
+  const menuToggle =()=>{
+    document.getElementById('menuToggle').style.display='block'
+    document.getElementById('menuToggleButton').style.display='none'
+    document.getElementById('menuToggleClose').style.display='block'
+  }
+  const menuToggleClose =()=>{
+    document.getElementById('menuToggle').style.display='none'
+    document.getElementById('menuToggleButton').style.display='block'
+    document.getElementById('menuToggleClose').style.display='none'
+  }
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
   const [content, setContent] = useState([])

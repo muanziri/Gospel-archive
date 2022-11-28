@@ -40,15 +40,31 @@ import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 
 import PlaceholderCard from "examples/Cards/PlaceholderCard";
 import loading from "assets/images/Loading_2.gif";
-
+import {Link } from "react-router-dom"
 
 // Overview page components
 import Header from "layouts/profile/components/Header";
-import PlatformSettings from "layouts/profile/components/PlatformSettings";
 import AccountStatus from "layouts/profile/components/AccountStatus";
 import MonitizationSettings from "layouts/profile/components/MonitizationSetting";
+import {
+  useSoftUIController,
+  setMiniSidenav
+} from "context";
 function Overview() {
- // let backendProxy='http://34.145.74.143:3001'
+  let WindowWidth = window.innerWidth;
+  const [controller, dispatch] = useSoftUIController();
+  const { miniSidenav} = controller;
+  const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
+  const menuToggle =()=>{
+    document.getElementById('menuToggle').style.display='block'
+    document.getElementById('menuToggleButton').style.display='none'
+    document.getElementById('menuToggleClose').style.display='block'
+  }
+  const menuToggleClose =()=>{
+    document.getElementById('menuToggle').style.display='none'
+    document.getElementById('menuToggleButton').style.display='block'
+    document.getElementById('menuToggleClose').style.display='none'
+  }
   const [userData,setUserData]=useState()
   
   useEffect(()=>{
@@ -185,7 +201,14 @@ const content=InitContent.data
     method:'POST',
     mode:'cors',
     body:NewFormData
-  }).then((res)=>res.json()).then((result)=>{
+  }).then((res)=>{
+    if(res.ok)
+    return res.json()
+    else{
+    alert('Sorry failed uplaod,This might be caused by slow internet connection')
+    }
+  }).then((result)=>{
+
     if(result.uploadStatus == "uploaded"){
       navigate('/home')
     }
@@ -339,7 +362,7 @@ const content=InitContent.data
                 />
               </Grid>
              ):
-             <div><h1>Your Content is loading</h1></div>
+             <div><center><img style={{ width: "20%" }} src={loading}></img></center></div>
              }
               <Grid onClick={DisplayContentEditor} style={{cursor:'pointer'}} item xs={12} md={6} xl={3}>
                 <PlaceholderCard title={{ variant: "h5", text: "Upload Video" }} outlined />
@@ -408,17 +431,26 @@ const content=InitContent.data
       <SoftBox id="SimbiLo" style={{ display: 'none' }}>
         {/* <PlatformSettings Ammount={userData?userData.user.supportAmmount:'0'} /> */}
       </SoftBox>
-
-      <div id='messagesPushed' style={{position:'fixed',width:'20%',height:'fit-content',right:'5%',bottom:'5%'}} className="w3-green w3-card w3-animate-left w3-padding w3-margin">
-        <button onClick={CloseMessage} className="w3-button w3-round-large w3-hover-black w3-display-topright">X</button>
-        <center><p>Welcome</p></center>
-        </div>
       </>:<>
        <DashboardNavbar />
       <div id='messagesPushed' className="w3-red w3-card w3-animate-bottom w3-padding w3-margin">
       <button  onClick={CloseMessage} className="w3-button w3-round-large w3-hover-red w3-display-topright">X</button>
         <center><p>Login to access your Profile</p></center>
         </div></>}
+        <div id='menuToggle' className="w3-animate-bottom" style={{width:'30px',height:'100px',display:'none',borderRadius:'2%', backgroundColor:'white', position:'fixed',bottom:'5%',right:'2.5%'}}>
+   <Link to="/profile"><i style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-circle-user"></i></Link>
+    <br/>
+    <i style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-bell"></i>
+    <br/>
+    <i onClick={handleMiniSidenav} style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-bars"></i>
+    </div>
+    {WindowWidth<500?
+    <div id='menuToggleButton' onClick={menuToggle} style={{width:'30px',height:'30px',borderRadius:'50%',display:'block', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
+    <center><i style={{fontSize:'100%',margin:'2%',color:'white'}} class="fa-solid fa-ellipsis-vertical"></i></center>
+       </div>:''}
+    <div id='menuToggleClose' onClick={menuToggleClose} style={{width:'30px',height:'30px',borderRadius:'50%',display:'none', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
+    <center><p style={{fontSize:'100%',margin:'2%',color:'white'}} > &times;</p></center>
+       </div>
       <Footer />
     </DashboardLayout>
   );}else{

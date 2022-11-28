@@ -9,16 +9,42 @@ import loading from "assets/images/Loading_2.gif";
 import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
 import React, { useRef } from "react";
 import { useState, useEffect } from 'react'
+import {
+  useSoftUIController,
+  setMiniSidenav
+} from "context";
 import { useScroll } from "framer-motion"
-import "./index.css";
+import { useLocation, Link } from "react-router-dom";
 
 
 function Dashboard() {
+  const [userData, setUserData] = useState();
+  useEffect(() => {
+    fetch(backendProxy + "/api", {
+      method: "GET",
+      credentials: "include",
+      mode: "cors",
+    })
+      .then((results) => {
+        return results.json();
+      })
+      .then((results) => {
+        setUserData(results);
+        //console.log(results);
+      });
+  }, []);
+  
+  const OpenContentModal = () => {
+    document.getElementById("ContentEditor1").style.display = "block";
+  };
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
-  //let backendProxy='http://34.145.74.143:3001'
-  const { scrollY } = useScroll()
+  const [controller, dispatch] = useSoftUIController();
+    const { scrollY } = useScroll()
   const [content, setContent] = useState([])
+
+  const { miniSidenav} = controller;
+  const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
    useEffect(() => {
     setCount(() => count * 1);
     fetchData()
@@ -33,6 +59,17 @@ function Dashboard() {
         document.getElementById('changeNegativeBtn').style.display='none'
       }
   }
+  const menuToggle =()=>{
+    document.getElementById('menuToggle').style.display='block'
+    document.getElementById('menuToggleButton').style.display='none'
+    document.getElementById('menuToggleClose').style.display='block'
+  }
+  const menuToggleClose =()=>{
+    document.getElementById('menuToggle').style.display='none'
+    document.getElementById('menuToggleButton').style.display='block'
+    document.getElementById('menuToggleClose').style.display='none'
+  }
+
   const ChangePagePositive =()=>{
     setCalculation((c) => c + 1)
     setCount((c) => c + 1)
@@ -42,10 +79,9 @@ function Dashboard() {
     let api = await fetch(backendProxy+'/api/Content/'+count);
     let apijson = await api.json()
     setContent(apijson)
-    console.log(content)
   }
 
-
+  let WindowWidth = window.innerWidth;
   
  
   const changeTheDateFormat = (n) => {
@@ -112,6 +148,21 @@ function Dashboard() {
         <button onClick={ChangePagePositive} className="w3-button w3-blue ">+</button>
       </div>
     </center>
+    <div id='menuToggle' className="w3-animate-bottom" style={{width:'30px',height:'100px',display:'none',borderRadius:'2%', backgroundColor:'white', position:'fixed',bottom:'5%',right:'2.5%'}}>
+     {userData?userData.user !== 'no user'?<Link to="/profile"><i onClick={OpenContentModal} style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-circle-user"></i></Link>:<i onClick={OpenContentModal} style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-circle-user"></i>:<i style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-circle-user"></i>}
+    <br/>
+    <i style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-bell"></i>
+    <br/>
+    <i onClick={handleMiniSidenav} style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-bars"></i>
+    </div>
+    {WindowWidth<500?
+    <div id='menuToggleButton' onClick={menuToggle} style={{width:'30px',height:'30px',borderRadius:'50%',display:'block', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
+    <center><i style={{fontSize:'100%',margin:'2%',color:'white'}} class="fa-solid fa-ellipsis-vertical"></i></center>
+       </div>:''}
+    <div id='menuToggleClose' onClick={menuToggleClose} style={{width:'30px',height:'30px',borderRadius:'50%',display:'none', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
+    <center><p style={{fontSize:'100%',margin:'2%',color:'white'}} > &times;</p></center>
+       </div>
+       
       <Footer />
     </DashboardLayout>
   );
