@@ -35,6 +35,8 @@ import React from "react";
 import { useState, useEffect,useRef } from 'react'
 import { useScroll } from "framer-motion"
 import useFetch from "react-fetch-hook";
+import offline from "assets/images/offline.png";
+
 import {
   useSoftUIController,
   setMiniSidenav
@@ -56,6 +58,10 @@ import "./index.css";
 //import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function MostViews() {
+  
+  const [isOnline, setIsOnline] = useState(true);
+  window.addEventListener('online', () => {setIsOnline(true)});
+window.addEventListener('offline', () => {setIsOnline(false)});
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav} = controller;
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
@@ -130,7 +136,7 @@ function MostViews() {
     let newFormat = date.toUTCString();
     return newFormat;
   };
-
+ if(isOnline == true){
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -191,7 +197,14 @@ function MostViews() {
       </center>
       <Footer />
     </DashboardLayout>
-  );
+  );}else{
+    return (
+      <DashboardLayout>
+        <center><img style={{ width: "20%" }} src={loading}></img></center>
+        <Footer />
+      </DashboardLayout>
+    );
+  }
 }
 
 export default MostViews;

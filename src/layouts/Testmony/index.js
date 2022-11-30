@@ -7,6 +7,7 @@ import Footer from "examples/Footer";
 import backendProxy from "BackendProxy";
 
 import loading from "assets/images/Loading_2.gif";
+import offline from "assets/images/offline.png";
 import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
 import React from "react";
 import { useState, useEffect,useRef } from 'react'
@@ -18,6 +19,10 @@ import { useScroll } from "framer-motion"
 import "./index.css";
 
 function Testmony() {
+  
+  const [isOnline, setIsOnline] = useState(true);
+  window.addEventListener('online', () => {setIsOnline(true)});
+window.addEventListener('offline', () => {setIsOnline(false)});
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav} = controller;
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
@@ -67,7 +72,7 @@ function Testmony() {
     let newFormat = date.toUTCString();
     return newFormat;
   };
-
+  if(isOnline == true){
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -128,7 +133,16 @@ function Testmony() {
       </center>
       <Footer />
     </DashboardLayout>
-  );
+  );}else{
+    return(
+      <DashboardLayout>
+         
+        <center><img src={offline} style={{width:'50%'}}></img>
+               <h1>You are offline</h1>
+        </center>
+    
+      </DashboardLayout>)
+  }
 }
 
 export default Testmony;

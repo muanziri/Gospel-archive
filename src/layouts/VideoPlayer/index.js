@@ -22,6 +22,7 @@ import DefaultBlogCarda from "examples/Cards/BlogCards/DefaultBlogCard";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
+import offline from "assets/images/offline.png";
 import loading from "assets/images/Loading_2.gif";
 import Logo from "assets/images/logo67.png";
 import backendProxy from "BackendProxy";
@@ -63,6 +64,9 @@ import {
 //import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function VideoPlayer({ likes, followers, views }) { 
+  const [isOnline, setIsOnline] = useState(true);
+  window.addEventListener('online', () => {setIsOnline(true)});
+window.addEventListener('offline', () => {setIsOnline(false)});
   const [count,setCount]=useState(Math.floor(Math.random() * 2)+1)
   const [content,setContent]=useState()
   //let backendProxy='http://34.145.74.143:3001'
@@ -448,7 +452,7 @@ function VideoPlayer({ likes, followers, views }) {
       videojs.log("player will dispose");
     });
   };
-
+ if(isOnline == true){
   return (
     <>
       <DashboardLayout>
@@ -1026,7 +1030,16 @@ function VideoPlayer({ likes, followers, views }) {
       </DashboardLayout>
       {WindowWidth < 900 ? "" : <Footer/>}
     </>
-  );
+  )}else{
+    return(
+    <DashboardLayout>
+       
+      <center><img src={offline} style={{width:'50%'}}></img>
+             <h1>You are offline</h1>
+      </center>
+  
+    </DashboardLayout>)}
 }
+
 
 export default VideoPlayer;

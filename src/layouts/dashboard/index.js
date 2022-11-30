@@ -6,6 +6,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import loading from "assets/images/Loading_2.gif";
+import offline from "assets/images/offline.png";
 import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
 import React, { useRef } from "react";
 import { useState, useEffect } from 'react'
@@ -18,6 +19,10 @@ import { useLocation, Link } from "react-router-dom";
 
 
 function Dashboard() {
+
+  const [isOnline, setIsOnline] = useState(true);
+  window.addEventListener('online', () => {setIsOnline(true)});
+window.addEventListener('offline', () => {setIsOnline(false)});
   const [userData, setUserData] = useState();
   useEffect(() => {
     fetch(backendProxy + "/api", {
@@ -89,7 +94,7 @@ function Dashboard() {
     let newFormat = date.toUTCString();
     return newFormat;
   };
-
+  if(isOnline == true){
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -165,7 +170,16 @@ function Dashboard() {
        
       <Footer />
     </DashboardLayout>
-  );
+  );}else{
+    return(
+    <DashboardLayout>
+       
+      <center><img src={offline} style={{width:'50%'}}></img>
+             <h1>You are offline</h1>
+      </center>
+  
+    </DashboardLayout>)
+  }
 }
 
 export default Dashboard;

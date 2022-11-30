@@ -20,7 +20,7 @@ import Grid from "@mui/material/Grid";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 //import SoftTypography from "components/SoftTypography";
-
+import offline from "assets/images/offline.png";
 // Soft UI Dashboard React examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -40,6 +40,9 @@ import { useState, useEffect,useRef } from 'react'
 import "./index.css";
 
 function Sermons() {
+  const [isOnline, setIsOnline] = useState(true);
+  window.addEventListener('online', () => {setIsOnline(true)});
+window.addEventListener('offline', () => {setIsOnline(false)});
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav} = controller;
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
@@ -112,6 +115,7 @@ function Sermons() {
     return newFormat;
   };
 
+  if(isOnline == true){
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -172,7 +176,17 @@ function Sermons() {
       </center>
       <Footer />
     </DashboardLayout>
-  );
+  );}else{
+    return (
+      <DashboardLayout>
+         
+      <center><img src={offline} style={{width:'50%'}}></img>
+             <h1>You are offline</h1>
+      </center>
+  
+    </DashboardLayout>
+    );
+  }
 }
 
 export default Sermons;

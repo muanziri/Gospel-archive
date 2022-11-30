@@ -8,6 +8,8 @@ import backendProxy from "BackendProxy";
 //import SoftTypography from "components/SoftTypography";
 
 // Soft UI Dashboard React examples
+import offline from "assets/images/offline.png";
+
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
@@ -30,6 +32,11 @@ import "./index.css";
 
 
 function Dashboard() {
+  
+  const [isOnline, setIsOnline] = useState(true);
+  window.addEventListener('online', () => {setIsOnline(true)});
+window.addEventListener('offline', () => {setIsOnline(false)});
+let WindowWidth = window.innerWidth;
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav} = controller;
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
@@ -81,6 +88,7 @@ function Dashboard() {
     let newFormat = date.toUTCString();
     return newFormat;
   };
+  if(isOnline == true){
   if(userData){
     if (userData.user) {
       if (userData.user !== "no user") {
@@ -142,9 +150,9 @@ function Dashboard() {
     <br/>
     <i onClick={handleMiniSidenav} style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-bars"></i>
     </div>
-    <div id='menuToggleButton' onClick={menuToggle} style={{width:'30px',height:'30px',borderRadius:'50%',display:'block', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
+    {WindowWidth<500?<div id='menuToggleButton' onClick={menuToggle} style={{width:'30px',height:'30px',borderRadius:'50%',display:'block', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
     <center><i style={{fontSize:'100%',margin:'2%',color:'white'}} class="fa-solid fa-ellipsis-vertical"></i></center>
-       </div>
+       </div>:''}
     <div id='menuToggleClose' onClick={menuToggleClose} style={{width:'30px',height:'30px',borderRadius:'50%',display:'none', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
     <center><p style={{fontSize:'100%',margin:'2%',color:'white'}} > &times;</p></center>
        </div>
@@ -159,7 +167,16 @@ function Dashboard() {
        <center><p>Login to have to access your History</p></center>
        </div>
        </DashboardLayout>)
-  }}}
+  }}}}else{
+    return(
+      <DashboardLayout>
+         
+        <center><img src={offline} style={{width:'50%'}}></img>
+               <h1>You are offline</h1>
+        </center>
+    
+      </DashboardLayout>)
+  }
 }
 
 export default Dashboard;

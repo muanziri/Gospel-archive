@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import SoftBox from "components/SoftBox";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+import offline from "assets/images/offline.png";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import backendProxy from "BackendProxy";
@@ -20,6 +21,10 @@ import "./index.css";
 
 
 function Songs() {
+  
+  const [isOnline, setIsOnline] = useState(true);
+  window.addEventListener('online', () => {setIsOnline(true)});
+window.addEventListener('offline', () => {setIsOnline(false)});
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav} = controller;
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
@@ -67,7 +72,7 @@ function Songs() {
     let newFormat = date.toUTCString();
     return newFormat;
   };
-
+  if(isOnline == true){
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -128,7 +133,16 @@ function Songs() {
       </center>
       <Footer />
     </DashboardLayout>
-  );
+  );}else{
+    return(
+      <DashboardLayout>
+         
+        <center><img src={offline} style={{width:'50%'}}></img>
+               <h1>You are offline</h1>
+        </center>
+    
+      </DashboardLayout>)
+  }
 }
 
 export default Songs;

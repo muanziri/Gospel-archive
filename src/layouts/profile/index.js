@@ -21,7 +21,7 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
-
+import offline from "assets/images/offline.png";
 // @mui icons
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -51,6 +51,9 @@ import {
   setMiniSidenav
 } from "context";
 function Overview() {
+  const [isOnline, setIsOnline] = useState(true);
+  window.addEventListener('online', () => {setIsOnline(true)});
+window.addEventListener('offline', () => {setIsOnline(false)});
   let WindowWidth = window.innerWidth;
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav} = controller;
@@ -250,6 +253,7 @@ const content=InitContent.data
   const DisplayProfileEditor = () => {
     document.getElementById('ProfileEditor').style.display = 'block'
   }
+  if(isOnline == true){
   if(userData){
     if(userData.user){
       let Name=userData.user.userName
@@ -464,6 +468,16 @@ const content=InitContent.data
         <center><img style={{ width: "20%" }} src={loading}></img></center>
         <Footer />
       </DashboardLayout>
+    );
+  }}else{
+    return (
+      <DashboardLayout>
+         
+      <center><img src={offline} style={{width:'50%'}}></img>
+             <h1>You are offline</h1>
+      </center>
+  
+    </DashboardLayout>
     );
   }
 }
