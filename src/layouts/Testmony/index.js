@@ -5,6 +5,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import backendProxy from "BackendProxy";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 import loading from "assets/images/Loading_2.gif";
 import offline from "assets/images/offline.png";
@@ -62,8 +63,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
   async function fetchData() {
     let api = await fetch(backendProxy+'/api/Content/testmonies/'+count);
     let apijson = await api.json()
-    setContent(apijson)
-    console.log(content)
+    setContent([...content,...apijson])
   }
 
   
@@ -86,7 +86,14 @@ window.addEventListener('offline', () => {setIsOnline(false)});
         <SoftBox mb={3}>
           <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }} id="wrapper" >
             {content   ? (
-                content.map((element, key) => (
+              <InfiniteScroll
+              dataLength={content.length} //This is important field to render the next data
+              next={fetchData}
+              hasMore={true}
+              loader={<center><img src={loading} style={{width:'5%'}}></img></center>}
+              >
+               <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }} id="wrapper" >
+              {  content.map((element, key) => (
                   <Grid
                     key={key}
                     style={{ width: "400px", marginBottom: "10px", marginLeft: "10px" }}
@@ -113,7 +120,9 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                       action={{ type: "internal", route: "/videop" }}
                     />
                   </Grid>
-                ))
+                ))}
+                </div>
+                </InfiniteScroll>
             ) : (
               <Grid item xs={12} lg={5}>
                 <center>

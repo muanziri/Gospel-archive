@@ -5,6 +5,7 @@ import SoftBox from "components/SoftBox";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import offline from "assets/images/offline.png";
+import InfiniteScroll from "react-infinite-scroll-component";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import backendProxy from "BackendProxy";
@@ -84,9 +85,15 @@ window.addEventListener('offline', () => {setIsOnline(false)});
           </Grid>
         </SoftBox>
         <SoftBox mb={3}>
-          <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }} id="wrapper" >
             {content   ? (
-                content.map((element, key) => (
+              <InfiniteScroll
+              dataLength={content.length} //This is important field to render the next data
+              next={fetchData}
+              hasMore={true}
+              loader={<center><img src={loading} style={{width:'5%'}}></img></center>}
+              >
+               <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }} id="wrapper" >
+               { content.map((element, key) => (
                   <Grid
                     key={key}
                     style={{ width: "400px", marginBottom: "10px", marginLeft: "10px" }}
@@ -113,7 +120,9 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                       action={{ type: "internal", route: "/videop" }}
                     />
                   </Grid>
-                ))
+                ))}
+                </div>
+                </InfiniteScroll>
             ) : (
               <Grid item xs={12} lg={5}>
                 <center>
@@ -121,16 +130,8 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                 </center>
               </Grid>
             )}
-          </div>
         </SoftBox>
       </SoftBox>
-      <center>
-      <div >
-        <button onClick={ChangeNegative} id='changeNegativeBtn' className="w3-button w3-blue ">-</button>
-        <button id='pageNumber' className="w3-button w3-white ">{calculation}</button>
-        <button onClick={ChangePagePositive} className="w3-button w3-blue ">+</button>
-      </div>
-      </center>
       <Footer />
     </DashboardLayout>
   );}else{

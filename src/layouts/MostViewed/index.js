@@ -15,6 +15,7 @@ Coded by www.creative-tim.com
 
 // @mui material components
 import Grid from "@mui/material/Grid";
+import InfiniteScroll from "react-infinite-scroll-component";
 //import Icon from "@mui/material/Icon";
 
 // Soft UI Dashboard React components
@@ -103,8 +104,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
    fetch(backendProxy+'/api/Content/mostViews/'+count)
    .then((api)=>api.json())
    .then((apijson)=>{
-    setContent(apijson)
-    console.log(apijson)
+    setContent([...content,...apijson])
   })
     
     //console.log(content)
@@ -112,25 +112,6 @@ window.addEventListener('offline', () => {setIsOnline(false)});
  
 
   
- // const { data } = useFetch("/api/Content");
- /// const content = data;
-  // const {hasMore,setHasMore}=useState(true);
-  // const {page,setPage}=useState(1);
-  //   //const { size } = typography;
-  //   //const { chart, items } = reportsBarChartData;
-  //   // const fetchMoreData = () => {
-  //   //   if (content.length >= 2) {
-  //   //     setHasMore(false);
-  //   //     return;
-  //   //   }
-  //   //   // a fake async api call like which sends
-  //   //   // 20 more records in .5 secs
-  //   //   setTimeout(() => {
-  //   //     this.setState({
-  //   //       items: this.state.items.concat(Array.from({ length: 20 }))
-  //   //     });
-  //   //   }, 500);
-  //   // };
   const changeTheDateFormat = (n) => {
     let date = new Date(n);
     let newFormat = date.toUTCString();
@@ -148,9 +129,16 @@ window.addEventListener('offline', () => {setIsOnline(false)});
           </Grid>
         </SoftBox>
         <SoftBox mb={3}>
-          <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }} id="wrapper" >
             {content   ? (
-                content.map((element, key) => (
+               <InfiniteScroll
+               dataLength={content.length} //This is important field to render the next data
+               next={fetchData}
+               hasMore={true}
+               loader={<center><img src={loading} style={{width:'5%'}}></img></center>}
+               >
+                <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }} id="wrapper" >
+    
+               { content.map((element, key) => (
                   <Grid
                     key={key}
                     style={{ width: "400px", marginBottom: "10px", marginLeft: "10px" }}
@@ -177,7 +165,9 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                       action={{ type: "internal", route: "/videop" }}
                     />
                   </Grid>
-                ))
+                ))}
+                </div>
+                </InfiniteScroll>
             ) : (
               <Grid item xs={12} lg={5}>
                 <center>
@@ -185,22 +175,14 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                 </center>
               </Grid>
             )}
-          </div>
         </SoftBox>
       </SoftBox>
-      <center>
-      <div >
-        <button onClick={ChangeNegative} id='changeNegativeBtn' className="w3-button w3-blue ">-</button>
-        <button id='pageNumber' className="w3-button w3-white ">{calculation}</button>
-        <button onClick={ChangePagePositive} className="w3-button w3-blue ">+</button>
-      </div>
-      </center>
       <Footer />
     </DashboardLayout>
   );}else{
     return (
       <DashboardLayout>
-        <center><img style={{ width: "20%" }} src={loading}></img></center>
+        <center><img style={{ width: "20%" }} src={offline}></img></center>
         <Footer />
       </DashboardLayout>
     );
