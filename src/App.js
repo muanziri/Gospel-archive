@@ -47,7 +47,7 @@ import routes from "routes";
 import { useSoftUIController, setMiniSidenav } from "context";
 
 // Images
-import brand from "assets/images/logo67.png";
+import brand from "assets/images/logo67.webp";
 
 export default function App() {
  

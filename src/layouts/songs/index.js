@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import SoftBox from "components/SoftBox";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import offline from "assets/images/offline.png";
+import offline from "assets/images/offline.webp";
 import InfiniteScroll from "react-infinite-scroll-component";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";

@@ -21,7 +21,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 //import SoftTypography from "components/SoftTypography";
-import offline from "assets/images/offline.png";
+import offline from "assets/images/offline.webp";
 // Soft UI Dashboard React examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";

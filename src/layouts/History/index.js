@@ -8,7 +8,7 @@ import backendProxy from "BackendProxy";
 //import SoftTypography from "components/SoftTypography";
 
 // Soft UI Dashboard React examples
-import offline from "assets/images/offline.png";
+import offline from "assets/images/offline.webp";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";

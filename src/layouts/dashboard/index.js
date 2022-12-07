@@ -7,7 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import loading from "assets/images/Loading_2.gif";
-import offline from "assets/images/offline.png";
+import offline from "assets/images/offline.webp";
 import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
 import React, { useRef } from "react";
 import { useState, useEffect } from 'react'

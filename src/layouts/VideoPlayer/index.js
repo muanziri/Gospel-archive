@@ -22,9 +22,9 @@ import DefaultBlogCarda from "examples/Cards/BlogCards/DefaultBlogCard";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
-import offline from "assets/images/offline.png";
+import offline from "assets/images/offline.webp";
 import loading from "assets/images/Loading_2.gif";
-import Logo from "assets/images/logo67.png";
+import Logo from "assets/images/logo67.webp";
 import backendProxy from "BackendProxy";
 // Soft UI Dashboard React examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -415,7 +415,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
   }, []);
 
   const videoJsOptions = {
-    autoplay: false,
+    autoplay: true,
     controls: true,
     responsive: true,
     fluid: true,

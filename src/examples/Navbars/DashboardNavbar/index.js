@@ -39,7 +39,7 @@ import SoftAvatar from "components/SoftAvatar";
 // Soft UI Dashboard React examples
 import Breadcrumbs from "examples/Breadcrumbs";
 import NotificationItem from "examples/Items/NotificationItem";
-import Google from "assets/images/google.png";
+import Google from "assets/images/google.webp";
 
 // Custom styles for DashboardNavbar
 import {

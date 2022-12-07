@@ -21,7 +21,7 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
-import offline from "assets/images/offline.png";
+import offline from "assets/images/offline.webp";
 // @mui icons
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";

@@ -8,7 +8,7 @@ import backendProxy from "BackendProxy";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import loading from "assets/images/Loading_2.gif";
-import offline from "assets/images/offline.png";
+import offline from "assets/images/offline.webp";
 import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
 import React from "react";
 import { useState, useEffect,useRef } from 'react'

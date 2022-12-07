@@ -36,7 +36,7 @@ import React from "react";
 import { useState, useEffect,useRef } from 'react'
 import { useScroll } from "framer-motion"
 import useFetch from "react-fetch-hook";
-import offline from "assets/images/offline.png";
+import offline from "assets/images/offline.webp";
 
 import {
   useSoftUIController,
