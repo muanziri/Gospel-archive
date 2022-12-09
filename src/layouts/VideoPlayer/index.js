@@ -16,28 +16,20 @@ import "./index.css";
 // @mui material components
 import { useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCardSide";
-import DefaultBlogCarda from "examples/Cards/BlogCards/DefaultBlogCard";
-
-// Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
+import {lazy,Suspense} from "react"
 import SoftTypography from "components/SoftTypography";
-import offline from "assets/images/offline.webp";
+
 import loading from "assets/images/Loading_2.gif";
 import Logo from "assets/images/logo67.webp";
 import backendProxy from "BackendProxy";
-// Soft UI Dashboard React examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-//import Toolbar from "@mui/material/Toolbar"
-import Footer from "examples/Footer";
 import axios from 'axios'
 
 import React, { useState, useEffect } from "react";
 import useFetch from "react-fetch-hook";
-
-import VideoJS from "examples/Cards/BlogCards/videoJs";
-import videojs from "video.js";
+import { DefaultPlayer as Video } from 'react-html5video';
+import 'react-html5video/dist/styles.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faDownload, faShare, faEye } from "@fortawesome/free-solid-svg-icons";
 import SoftAvatar from "components/SoftAvatar";
@@ -48,23 +40,18 @@ import {
   useSoftUIController,
   setMiniSidenav
 } from "context";
-//import GradientLineChart from "examples/Charts/LineCharts/GradientLineChart";
 
-// Soft UI Dashboard React base styles
-//import typography from "assets/theme/base/typography";
+const Footer = lazy(()=>import('examples/Footer'))
+const offline = lazy(()=>import("assets/images/offline.webp"))
+const DashboardNavbar = lazy(()=>import("examples/Navbars/DashboardNavbar"))
+const DefaultBlogCard = lazy(()=>import("examples/Cards/BlogCards/DefaultBlogCardSide"))
+const DefaultBlogCarda = lazy(()=>import("examples/Cards/BlogCards/DefaultBlogCard"))
 
-// Dashboard layout components
-//import BuildByDevelopers from "layouts/dashboard/components/BuildByDevelopers";
-//import WorkWithTheRockets from "layouts/dashboard/components/WorkWithTheRockets";
-//import Projects from "layouts/dashboard/components/Projects";
-//import OrderOverview from "layouts/dashboard/components/OrderOverview";
 
-// Data
-
-//import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function VideoPlayer({ likes, followers, views }) { 
   const [isOnline, setIsOnline] = useState(true);
+  const [currentVideoPlayed,setCurrentVideoPlayed]=useState([])
   window.addEventListener('online', () => {setIsOnline(true)});
 window.addEventListener('offline', () => {setIsOnline(false)});
   const [count,setCount]=useState(Math.floor(Math.random() * 2)+1)
@@ -82,7 +69,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     });},[])
  
   const [controller, dispatch] = useSoftUIController();
-  const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
+  const { miniSidenav} = controller;
   const changeTheDateFormat = (n) => {
     let date = new Date(n);
     let newFormat = date.toUTCString();
@@ -96,33 +83,53 @@ window.addEventListener('offline', () => {setIsOnline(false)});
   const displayCommentsClosed=()=>{
     document.getElementById('CommentsDisplay').style.display='none'
   }
-  useEffect(() => {
-    fetchData();
-  }, []);
-  async function fetchData() {
+  async function fetchCommentData() {
     let api = await fetch(backendProxy+"/api/commentPool");
     let apijson = await api.json();
     setActualComments(apijson);
   }
   useEffect(() => {
-    setCount(() => count * 1);
-    fetchData()
-  }, [count])
+    fetchCommentData();
+  }, []);
   async function fetchData() {
     let api = await fetch(backendProxy+'/api/Content/'+count);
     let apijson = await api.json()
     setContent(apijson)
    
   }
+  async function fetchCurrentVid() {
+    let api = await fetch(backendProxy+'/api/CurrentVideo/'+id);
+    let apijson = await api.json()
+    setCurrentVideoPlayed(apijson)
+   
+   
+  }
+  useEffect(() => {
+    fetchCurrentVid()
+    setCount(() => count * 1);
+    fetchData()
+  }, [count])
+
  
 
+
   const CommentsDisplay = [];
-  const ActualComments = [];
+
   const comment = useFetch(backendProxy+"/api/commentPool");
   const comments = comment.data;
-  const playerRef = React.useRef(null);
+
   let theUrl = "https://drive.google.com/uc?export=download&id=";
   let { id } = useParams();
+
+  let  source= theUrl+id
+  
+  const videoRef = useRef();
+
+  useEffect(() => {    
+    
+    videoRef.current.videoEl.load()
+    num.current=0
+  }, [source]);
   let CommentsOnThisPost = [];
   let num = useRef(0);
   let shareIt = window.location.href;
@@ -148,11 +155,12 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     window.open(link);
   }
   if (content) {
-    currentVideo = content.filter((videocontent) => videocontent.ThumbnailId == id);
-    if(currentVideo.length>0){
-    init = 0 + currentVideo[0].Likes.length;
+    currentVideo = currentVideoPlayed.CurrentVid
+
+    if(currentVideo){
+    init = 0 + currentVideo.Likes.length;
     if (comments) {
-      let commentsIds = currentVideo[0].CommentsIds;
+      let commentsIds = currentVideo.CommentsIds;
       CommentsDisplay.push(actualComments);
 
       if (actualComments) {
@@ -189,7 +197,8 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     
     };
     CommentStyle = {
-      width: "100%",
+      width: "60%",
+      
       border:'none',
       color:'white',
       borderRadius:'5px',
@@ -199,7 +208,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
       borderRadius:'5px',
       // display:'none',
       position: "absolute",
-      left: "0%",
+      left: "17.5%",
       top: "100%",
     };
   } else if (WindowWidth < 900) {
@@ -266,7 +275,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     };
   }
 
-  let source = theUrl + id;
+  
   
   const onClickAddLike = () => {
     var NewFormData = new FormData();
@@ -326,18 +335,8 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     xhr.open("POST", backendProxy+"/api/addComment");
     xhr.send(NewFormData);
   };
-  const postCrypto = (e) => {
-    e.preventDefault();
 
-    let form = document.getElementById("amountBitcoin");
-    form.submit();
-  };
-  const postMoney = (e) => {
-    e.preventDefault();
 
-    let form = document.getElementById("amountMoney");
-    form.submit();
-  };
   const redirectFunc = (e) => {
     e.preventDefault();
     var NewFormData = new FormData();
@@ -389,81 +388,35 @@ window.addEventListener('offline', () => {setIsOnline(false)});
   };
  
 
-  const redirectFunc2 = (e) => {
-    e.preventDefault();
-    var NewFormData = new FormData();
-    var xhr = new XMLHttpRequest();
-    NewFormData.append("comment", document.getElementById("CommentInput2").value);
-    xhr.open("POST", backendProxy+"/api/addComment");
-    xhr.send(NewFormData);
-  };
 
 
-  const [matches, setMatches] = useState(window.matchMedia("(min-width: 760px)").matches);
 
-  const [matched, setMatched] = useState(window.matchMedia("(max-width: 1200px)").matches);
-
-  useEffect(() => {
-    window
-      .matchMedia("(min-width: 760px)")
-      .addEventListener("change", (e) => setMatches(e.matches));
-  }, []);
-  useEffect(() => {
-    window
-      .matchMedia("(min-width: 1200px)")
-      .addEventListener("change", (e) => setMatched(e.matches));
-  }, []);
-
-  const videoJsOptions = {
-    autoplay: true,
-    controls: true,
-    responsive: true,
-    fluid: true,
-    sources: [
-      {
-        src: source,
-        type: "video/mp4",
-      },
-    ],
-  };
-  const handlePlayerReady = (player) => {
-    playerRef.current = player;
-    player.on('touchstart', function (e) {
-      if (e.target.nodeName === 'VIDEO') {
-          if (player.paused()) {
-              this.play();
-          } else {
-              this.pause();
-          }
-      }
-  });
-    // You can handle player events here, for example:
-    player.on("waiting", () => {
-      videojs.log("player is waiting");
-    });
-    player.on("timeupdate", (e) => {
-      let lop = num.current++;
-      if (lop == 20) {
-        onClickViews();
-      }
-    });
-
-    player.on("dispose", () => {
-      videojs.log("player will dispose");
-    });
-  };
+  
  if(isOnline == true){
   return (
     <>
       <DashboardLayout>
     
-     { WindowWidth < 500 ?<div style={{backgroundColor:'Black',position:'relative',marginTop:'-8%',marginLeft:'-8%',width:'116%',height:'25%'}}><img style={{width:'10%',height:'5%',marginLeft:'2%'}} src={Logo}></img><b style={{color:'#17C1E8'}}> Gospel Archived</b><i onClick={handleMiniSidenav} style={{color:'#17C1E8',marginTop:'3%',position:'relative',left:"40%"}} class="fa-solid fa-bars"></i></div>:<DashboardNavbar/>}
+     { WindowWidth < 500 ?<div style={{backgroundColor:'Black',position:'relative',marginTop:'-8%',marginLeft:'-8%',width:'116%',height:'25%'}}><img style={{width:'10%',height:'5%',marginLeft:'2%'}} src={Logo}></img><b style={{color:'#17C1E8'}}> Gospel Archived</b><i onClick={handleMiniSidenav} style={{color:'#17C1E8',marginTop:'3%',position:'relative',left:"40%"}} class="fa-solid fa-bars"></i></div>:<Suspense fallback={<center><img src={loading} style={{width:'20%'}}></img></center>}><DashboardNavbar/></Suspense>}
         <SoftBox py={3}>
           <SoftBox mb={3}>
             <Grid container spacing={3}>
               <Grid>
                 <div style={VidplayerStyle}>
-                  <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+                  <Video  ref={videoRef}  controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
+                  autoPlay="true"
+                 
+                  onTimeUpdate={()=>{
+                    let lop = num.current++;
+                    if (lop == 20) {
+              
+                      onClickViews();
+                    }
+                  }}
+                   >
+                  
+                     <source  src={source} type="video/mp4" />
+                    </Video>
                 </div>
               </Grid>
             </Grid>
@@ -502,23 +455,23 @@ window.addEventListener('offline', () => {setIsOnline(false)});
         </div>}
         {currentVideo ? (
           <>
-            <h4>{currentVideo.length>0?currentVideo[0].Title:''}</h4>
+            <h4 style={WindowWidth>500?{width:'60%'}:{width:'100%'}}>{currentVideo?currentVideo.Title:''}</h4>
             <SoftBox style={AvartaStyle} display="flex" alignItems="center" mt={3}>
-              <SoftAvatar src={currentVideo.length>0? currentVideo[0].ProfilePhotoUrl:''} variant="rounded" shadow="md" />
+              <SoftAvatar src={currentVideo? currentVideo.ProfilePhotoUrl:''} variant="rounded" shadow="md" />
               <SoftBox pl={2} lineHeight={0}>
                 <SoftTypography component="h6" variant="button" fontWeight="medium" gutterBottom>
-                  {currentVideo.length>0?currentVideo[0].userName:''}
+                  {currentVideo?currentVideo.userName:''}
                 </SoftTypography>
                 <SoftTypography variant="caption" color="text">
-                  {currentVideo.length>0?currentVideo[0].Date:''}
+                  {currentVideo?currentVideo.Date:''}
                 </SoftTypography>
               </SoftBox>
             </SoftBox>
             <SoftTypography style={AccountInfo} variant="caption" color="text">
-              <b>Views</b> <b>{currentVideo.length>0?currentVideo[0].Views:''}</b>
+              <b>Views</b> <b>{currentVideo?currentVideo.Views:''}</b>
               
               <br />
-              <b>likes</b> <b>{currentVideo.length>0?currentVideo[0].Likes.length:''}</b>
+              <b>likes</b> <b>{currentVideo?currentVideo.Likes.length:''}</b>
             </SoftTypography>
           </>
         ) : (
@@ -544,19 +497,11 @@ window.addEventListener('offline', () => {setIsOnline(false)});
           <div style={{ cursor: "none" }} className="w3-button  w3-white w3-round w3-margin-left">
             <FontAwesomeIcon style={{ color: "#2196F3" }} icon={faEye} /> Views
             <div id="addLike" style={{ color: "#2196F3" }}>
-              { currentVideo && currentVideo.length>0 ? currentVideo[0].Views : "Loading ..."}
+              { currentVideo && currentVideo ? currentVideo.Views : "Loading ..."}
             </div>
           </div>
-          {/* <button
-                          onClick={openSupportModelPayment}
-                          className="w3-button w3-hover-black w3-blue w3-round w3-margin-left"
-                        >
-                          <FontAwesomeIcon style={{ color: "#ffff" }} icon={faMoneyCheckDollar} />{" "}
-                          Support
-                        </button> */}
-
-          {currentVideo && currentVideo.length>0 ? (
-            currentVideo[0].showDownloadButton == true ? (
+          {currentVideo && currentVideo ? (
+            currentVideo.showDownloadButton == true ? (
               <a href={source}><button  className="w3-button w3-hover-black w3-blue w3-round w3-margin-left">
                 <FontAwesomeIcon style={{ color: "#ffff" }} icon={faDownload} />
                 Download
@@ -603,7 +548,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
             </button>
             <div style={{ cursor: "none" }} className="w3-button  w3-white w3-round ">
               <FontAwesomeIcon style={{ color: "#2196F3" }} icon={faEye} /> Views
-              {currentVideo && currentVideo.length>0 ? currentVideo[0].Views : "Loading ..."}
+              {currentVideo && currentVideo ? currentVideo.Views : "Loading ..."}
             </div>
             {/* <button
                         onClick={openSupportModelPayment}
@@ -613,8 +558,8 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                         Support
                       </button> */}
 
-            {currentVideo && currentVideo.length>0 ? (
-              currentVideo[0].showDownloadButton == true ? (
+            {currentVideo && currentVideo ? (
+              currentVideo.showDownloadButton == true ? (
                 <center>
                  <a href={source} className="w3-button w3-hover-black w3-blue w3-round w3-margin-left"> <button >
                     <FontAwesomeIcon style={{ color: "#ffff" }} icon={faDownload} />
@@ -653,7 +598,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
               className="w3-button  w3-hover-black w3-blue w3-round w3-margin-top w3-margin-left"
             >
               <FontAwesomeIcon style={{ color: "#ffff" }} icon={faThumbsUp} />
-              {init}
+              <span></span> {init}
             </button>
             <button
               onClick={sharePopUp}
@@ -666,7 +611,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
               className="w3-button  w3-white w3-round w3-margin-top w3-margin-left"
             >
               <FontAwesomeIcon style={{ color: "#2196F3" }} icon={faEye} />
-              {currentVideo && currentVideo.length>0? currentVideo[0].Views : "Loading ..."}
+              <span></span> {currentVideo && currentVideo? currentVideo.Views : "Loading ..."}
             </div>
             {/* <button
                     onClick={openSupportModelPayment}
@@ -676,8 +621,8 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                     Support
                   </button> */}
 
-            {currentVideo && currentVideo.length>0 ? (
-              currentVideo[0].showDownloadButton == true ? (
+            {currentVideo && currentVideo ? (
+              currentVideo.showDownloadButton == true ? (
                 <a href={source}><button className="w3-button w3-hover-black w3-blue w3-margin-top w3-round w3-margin-left">
                   <FontAwesomeIcon style={{ color: "#ffff" }} icon={faDownload} />
                 </button></a>
@@ -707,7 +652,9 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                     key={key}
                     style={WindowWidth < 500?{ width: "90%", marginBottom: "10px", marginLeft: "10px" }:WindowWidth < 900?{ width: "45%", marginBottom: "10px", marginLeft: "10px" }:{ width: "90%", marginBottom: "10px", marginLeft: "10px" }}
                   >
-                    {WindowWidth < 500?<DefaultBlogCard
+                    {WindowWidth < 500?
+                    <Suspense>
+                    <DefaultBlogCard
                       image={element.VideoId}
                       categoryName={element.Category}
                       category={{ color: "info", label: "short" }}
@@ -727,7 +674,11 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                         date: "Posted on 28 February",
                       }}
                       action={{ type: "internal", route: "/videop" }}
-                    />:WindowWidth < 900?<DefaultBlogCarda
+                    />
+                    </Suspense>
+                    :WindowWidth < 900?
+                    <Suspense fallback={<center><img src={loading} style={{width:'20%'}}></img></center>}>
+                    <DefaultBlogCarda
                     image={element.VideoId}
                     categoryName={element.Category}
                     category={{ color: "info", label: "short" }}
@@ -747,7 +698,11 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                       date: "Posted on 28 February",
                     }}
                     action={{ type: "internal", route: "/videop" }}
-                  />:<DefaultBlogCard
+                  />
+                  </Suspense>
+                  :
+                  <Suspense fallback={<center><img src={loading} style={{width:'20%'}}></img></center>}>
+                  <DefaultBlogCard
                   image={element.VideoId}
                   categoryName={element.Category}
                   category={{ color: "info", label: "short" }}
@@ -767,7 +722,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                     date: "Posted on 28 February",
                   }}
                   action={{ type: "internal", route: "/videop" }}
-                />}
+                /></Suspense>}
                   </Grid>
                 ))
             ) : (
@@ -806,8 +761,8 @@ window.addEventListener('offline', () => {setIsOnline(false)});
             ></textarea>
             {userData ? (
               <>
-                {userData.user !== "no user" && currentVideo && currentVideo.length>0 ? (
-                  currentVideo[0].allowCommenting == true ? (
+                {userData.user !== "no user" && currentVideo && currentVideo ? (
+                  currentVideo.allowCommenting == true ? (
                     <button
                       onClick={redirectFunc}
                       style={{
@@ -829,27 +784,45 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                     </button>
                   ) : (
                     <>
-                      <br />
+                     <button
+                      style={{
+                        height: "30px",
+                        width: "fit-content",
+                        position:'absolute',
+                        right:'3%',
+                        top:'5%',
+                        border: "none",
+                        marginTop: "2px",
+                        paddingLeft: "2px",
+                        position:'absolute',
+
+                        paddingRight: "2px",
+                      }}
+                      className="w3-hover-black w3-blue w3-round w3-margin-top"
+                    >
+                      Login for commenting
+                    </button>
                     </>
                   )
                 ) : (
                   <button
-                    style={{
-                      height: "30px",
-                      width: "fit-content",
-                      border: "none",
-                      display: "none",
-                      marginTop: "2px",
-                      paddingLeft: "2px",
-                      paddingRight: "2px",
-                      color: "white",
-                      backgroundColor: "lightgray",
-                    }}
-                    disabled
-                    className=" w3-round"
-                  >
-                    login first
-                  </button>
+                  style={{
+                    height: "30px",
+                    width: "fit-content",
+                    position:'absolute',
+                    right:'3%',
+                    top:'5%',
+                    border: "none",
+                    marginTop: "2px",
+                    paddingLeft: "2px",
+                    position:'absolute',
+
+                    paddingRight: "2px",
+                  }}
+                  className="w3-hover-black w3-blue w3-round w3-margin-top"
+                >
+                  Login for commenting
+                </button>
                 )}
               </>
             ) : (
@@ -875,8 +848,8 @@ window.addEventListener('offline', () => {setIsOnline(false)});
               style={{ height: "380px", marginTop: "-2.5%", overflowY: "scroll" }}
             >
               {CommentsOnThisPost ? (
-                currentVideo && currentVideo.length>0 ? (
-                  currentVideo[0].allowCommenting == true ? (
+                currentVideo && currentVideo ? (
+                  currentVideo.allowCommenting == true ? (
                     CommentsOnThisPost.map((element, key) => (
                       <div
                         key={key}
@@ -946,89 +919,17 @@ window.addEventListener('offline', () => {setIsOnline(false)});
             <br />
             <br />
             <>
-              {userData ? (
-                userData.user !== "no user" ? (
-                  <center>
-                    <h4>
-                      <b>Support this Channel</b>
-                    </h4>
-                    <br />
-                    <form id="amountMoney" action={backendProxy+"/api/paypal"} method="post">
-                      <input
-                        style={{ width: "60%", display: "none" }}
-                        name="IdOfTheSupporter"
-                        value={
-                          userData
-                            ? userData.user !== "no user"
-                              ? userData.user._id
-                              : "laoding"
-                            : "loading"
-                        }
-                        className="w3-input w3-margin"
-                        type="text"
-                      />
-                      <input
-                        style={{ width: "60%" }}
-                        name="ammount"
-                        placeholder="Ammount in USD"
-                        className="w3-input w3-margin"
-                        type="text"
-                      />
-                      <input
-                        style={{ width: "60%", display: "none" }}
-                        name="accountName"
-                        value={
-                          currentVideo && currentVideo.length>0 ? (
-                            currentVideo[0].userName
-                          ) : (
-                            <center>
-                              <img style={{ marginBottom: "45%" }} src={loading}></img>
-                            </center>
-                          )
-                        }
-                        className="w3-input w3-margin"
-                        type="text"
-                      />
-                    </form>
-                    <br />
-                    <button onClick={postMoney} className="w3-button w3-blue w3-large">
-                      with Paypal
-                    </button>
-                    <br />
-
-                    <br />
-                  </center>
-                ) : (
-                  <div>
-                    <center>
-                      <h5>
-                        <b>
-                          To be able to support{" "}
-                          {currentVideo && currentVideo.length>0? (
-                            currentVideo[0].userName
-                          ) : (
-                            <center>
-                              <img style={{ marginBottom: "45%" }} src={loading}></img>
-                            </center>
-                          )}
-                          , You need to login first
-                        </b>
-                      </h5>
-                      <br />
-                      <br />
-                    </center>
-                  </div>
-                )
-              ) : (
-                <center>
-                  <img style={{ marginBottom: "45%" }} src={loading}></img>
-                </center>
-              )}
             </>
           </div>
         </div>
       </DashboardLayout>
-      {WindowWidth < 900 ? "" : <Footer/>}
+      {WindowWidth < 900 ? "" :
+      <Suspense
+      fallback={<center><img src={loading} style={{width:'20%'}}></img></center>}
+      >
+      <Footer/>
+      </Suspense>
+      }
     </>
   )}else{
     return(

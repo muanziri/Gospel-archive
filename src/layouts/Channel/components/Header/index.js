@@ -43,7 +43,7 @@ import { faAddressCard } from '@fortawesome/free-solid-svg-icons'
 import breakpoints from "assets/theme/base/breakpoints";
 
 // Images
-import curved0 from "assets/images/curved-images/curved0.jpg";
+import curved0 from "assets/images/curved-images/curved0.webp";
 
 function Header(props) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");

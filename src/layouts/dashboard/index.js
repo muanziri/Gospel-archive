@@ -4,11 +4,9 @@ import backendProxy from "BackendProxy";
 import SoftBox from "components/SoftBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import InfiniteScroll from "react-infinite-scroll-component";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
+
 import loading from "assets/images/Loading_2.gif";
-import offline from "assets/images/offline.webp";
-import DefaultBlogCard from "examples/Cards/BlogCards/DefaultBlogCard";
+
 import React, { useRef } from "react";
 import { useState, useEffect } from 'react'
 import {
@@ -16,7 +14,12 @@ import {
   setMiniSidenav
 } from "context";
 import { useScroll } from "framer-motion"
-import { useLocation, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
+import { lazy,Suspense } from 'react'
+const Footer= lazy(()=>import("examples/Footer"))
+const DashboardNavbar= lazy(()=>import("examples/Navbars/DashboardNavbar"));
+const offline= lazy(()=>import("assets/images/offline.webp"))
+const DefaultBlogCard= lazy(()=>import("examples/Cards/BlogCards/DefaultBlogCard"))
 
 
 function Dashboard() {
@@ -98,7 +101,11 @@ window.addEventListener('offline', () => {setIsOnline(false)});
   if(isOnline == true){
   return (
     <DashboardLayout>
+      <Suspense
+      fallback={<center><img src={loading} style={{width:'20%'}}></img></center>}
+      >
       <DashboardNavbar />
+      </Suspense>
       <SoftBox py={3}>
         <SoftBox mb={3}>
           <Grid container spacing={3}>
@@ -121,6 +128,9 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                     key={key}
                     style={{ width: "400px", marginBottom: "10px", marginLeft: "10px" }}
                   >
+                    <Suspense
+                    fallback={<center><img src={loading} style={{width:'30%'}}></img></center>}
+                    >
                     <DefaultBlogCard
                       image={element.VideoId}
                       categoryName={element.Category}
@@ -142,6 +152,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
                       }}
                       action={{ type: "internal", route: "/videop" }}
                     />
+                    </Suspense>
                   </Grid>
                 ))}
                  </div>
@@ -169,16 +180,23 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     <div id='menuToggleClose' onClick={menuToggleClose} style={{width:'30px',height:'30px',borderRadius:'50%',display:'none', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
     <center><p style={{fontSize:'100%',margin:'2%',color:'white'}} > &times;</p></center>
        </div>
-
+      <Suspense
+      fallback={<center><img src={loading} style={{width:'20%'}}></img></center>}
+      >
       <Footer />
+      </Suspense>
     </DashboardLayout>
   );}else{
     return(
     <DashboardLayout>
-
+       
+       <Suspense
+       fallback={<center><img src={loading} style={{width:'50%'}}></img></center>}
+       >
       <center><img src={offline} style={{width:'50%'}}></img>
              <h1>You are offline</h1>
       </center>
+      </Suspense>
 
     </DashboardLayout>)
   }

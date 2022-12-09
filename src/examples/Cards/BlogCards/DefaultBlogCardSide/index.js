@@ -34,7 +34,9 @@ import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
 import './index.css'
+import backendProxy from "BackendProxy";
 function DefaultBlogCard({ categoryName,Duration,VideoId,image, category,followers,views,likes, title,authorImage,channelUrl, authorDate,authorName, action }) {
+  
   const hello = useFetch("/api");
   let WindowWidth = window.innerWidth;
   const userData = hello.data;
@@ -46,6 +48,7 @@ function DefaultBlogCard({ categoryName,Duration,VideoId,image, category,followe
     
   //  }
    const AddHistory=()=>{
+   
     var NewFormData = new FormData();
     var xhr = new XMLHttpRequest();
     if(userData){
@@ -53,7 +56,7 @@ function DefaultBlogCard({ categoryName,Duration,VideoId,image, category,followe
       if (userData.user !== "no user") {
         NewFormData.append("user", userData.user._id);
         NewFormData.append("videoId", VideoId);
-        xhr.open("POST", "http://localhost:3001/api/addHistory");
+        xhr.open("POST", backendProxy+"/api/addHistory");
         xhr.send(NewFormData);
       }
     }}else{console.log('hello')}

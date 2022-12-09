@@ -37,10 +37,11 @@ import Footer from "examples/Footer";
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import VideoPlayers from "examples/Cards/BlogCards/VideoPlayer"
-import VideoJS from "examples/Cards/BlogCards/videoJs";
+
 import {useNavigate} from 'react-router-dom'
-import videojs from "video.js";
+import { DefaultPlayer as Video } from 'react-html5video';
+import 'react-html5video/dist/styles.css';
+
 import useFetch from "react-fetch-hook"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faDownload, faShare, faEye } from "@fortawesome/free-solid-svg-icons";
@@ -217,18 +218,7 @@ const closeContentModal = () => {
       },
     ],
   };
-  const handlePlayerReady = (player) => {
-    playerRef.current = player;
-  
-    // You can handle player events here, for example:
-    player.on("waiting", () => {
-      videojs.log("player is waiting");
-    });
-  
-    player.on("dispose", () => {
-      videojs.log("player will dispose");
-    });
-  };
+
 
   const [matches, setMatches] = useState(
     window.matchMedia("(min-width: 768px)").matches
@@ -250,10 +240,18 @@ const closeContentModal = () => {
           <Grid container spacing={3}>
           {WindowWidth>500?
             <Grid  style={{marginLeft:'3%',marginBottom:'3%',width:'70%',height:'30%'}}>
-            <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+             <Video  controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
+                  >
+                  
+                     <source src={source} type="video/mp4" />
+                    </Video>
             {UserContent?<center><h3>{UserContent[0].Title}</h3></center>:<center><h3>Loading ...</h3></center>}
             </Grid>:<Grid  style={{marginLeft:'3%',marginBottom:'3%',width:'100%',height:'30%'}}>
-            <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+            <Video  controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
+                   >
+                  
+                     <source src={source} type="video/mp4" />
+                    </Video>
             {UserContent?<center><h3>{UserContent[0].Title}</h3></center>:<center><h3>Loading ...</h3></center>}
             </Grid>}
           </Grid>
