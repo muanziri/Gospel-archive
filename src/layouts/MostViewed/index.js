@@ -21,6 +21,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import backendProxy from "BackendProxy";
+import { Link } from "react-router-dom";
 //import SoftTypography from "components/SoftTypography";
 
 // Soft UI Dashboard React examples
@@ -59,6 +60,24 @@ import "./index.css";
 //import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 
 function MostViews() {
+  let WindowWidth = window.innerWidth;
+  const [userData, setUserData] = useState();
+  useEffect(() => {
+    fetch(backendProxy + "/api", {
+      method: "GET",
+      credentials: "include",
+      mode: "cors",
+    })
+      .then((results) => {
+        return results.json();
+      })
+      .then((results) => {
+        setUserData(results);
+        //console.log(results);
+      });
+  }, []);
+
+ 
   
   const [isOnline, setIsOnline] = useState(true);
   window.addEventListener('online', () => {setIsOnline(true)});
@@ -76,30 +95,17 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     document.getElementById('menuToggleButton').style.display='block'
     document.getElementById('menuToggleClose').style.display='none'
   }
-
+  const OpenContentModal = () => {
+    document.getElementById("ContentEditor1").style.display = "block";
+  };
   //let backendProxy='http://34.145.74.143:3001';
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
-  const [calculation, setCalculation] = useState(1);
   const [content, setContent] = useState([])
   useEffect(() => {
     setCount(() => count * 1);
     fetchData()
   }, [count])
-    const ChangeNegative =()=>{
-    setCalculation((c) => c - 1)
-    setCount((c) => c - 1)
-    if(count >=1)
-      {document.getElementById('pageNumber').innerHTML=calculation
-
-    }else{
-        document.getElementById('changeNegativeBtn').style.display='none'
-      }
-  }
-  const ChangePagePositive =()=>{
-    setCalculation((c) => c + 1)
-    setCount((c) => c + 1)
-    document.getElementById('pageNumber').innerHTML=calculation;
-  }
+ 
  function fetchData() {
    fetch(backendProxy+'/api/Content/mostViews/'+count)
    .then((api)=>api.json())
@@ -177,6 +183,20 @@ window.addEventListener('offline', () => {setIsOnline(false)});
             )}
         </SoftBox>
       </SoftBox>
+      <div id='menuToggle' className="w3-animate-bottom" style={{width:'30px',height:'100px',display:'none',borderRadius:'2%', backgroundColor:'white', position:'fixed',bottom:'5%',right:'2.5%'}}>
+     {userData?userData.user !== 'no user'?<Link to="/profile"><i onClick={OpenContentModal} style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-circle-user"></i></Link>:<i onClick={OpenContentModal} style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-circle-user"></i>:<i style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-circle-user"></i>}
+    <br/>
+    <i style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-bell"></i>
+    <br/>
+    <i onClick={handleMiniSidenav} style={{fontSize:'100%',margin:'10%'}} class="fa-solid fa-bars"></i>
+    </div>
+    {WindowWidth<500?
+    <div id='menuToggleButton' onClick={menuToggle} style={{width:'30px',height:'30px',borderRadius:'50%',display:'block', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
+    <center><i style={{fontSize:'100%',margin:'2%',color:'white'}} class="fa-solid fa-ellipsis-vertical"></i></center>
+       </div>:''}
+    <div id='menuToggleClose' onClick={menuToggleClose} style={{width:'30px',height:'30px',borderRadius:'50%',display:'none', backgroundColor:'#344767', position:'fixed',bottom:'1%',right:'3%'}}>
+    <center><p style={{fontSize:'100%',margin:'2%',color:'white'}} > &times;</p></center>
+       </div>
       <Footer />
     </DashboardLayout>
   );}else{

@@ -1,2 +1,2 @@
-const backendProxy = "http://localhost:3001"
+const backendProxy = ""
 export default backendProxy
