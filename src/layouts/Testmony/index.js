@@ -55,8 +55,6 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     document.getElementById('menuToggleClose').style.display='none'
   }
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
-  const [calculation, setCalculation] = useState(1);
-  //let backendProxy='http://34.145.74.143:3001'
   const [content, setContent] = useState([])
   useEffect(() => {
     setCount(() => count * 1);

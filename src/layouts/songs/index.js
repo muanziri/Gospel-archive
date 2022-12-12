@@ -59,7 +59,6 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     document.getElementById('menuToggleClose').style.display='none'
   }
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
-  const [calculation, setCalculation] = useState(1);
   const [content, setContent] = useState([])
   useEffect(() => {
     setCount(() => count * 1);
@@ -73,7 +72,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     let api = await fetch(backendProxy+'/api/Content/Songs/'+count);
     let apijson = await api.json()
     setContent(apijson)
-    console.log(content)
+
   }
   
   const changeTheDateFormat = (n) => {

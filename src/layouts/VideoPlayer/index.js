@@ -97,6 +97,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     setContent(apijson)
    
   }
+  let { id } = useParams();
   async function fetchCurrentVid() {
     let api = await fetch(backendProxy+'/api/CurrentVideo/'+id);
     let apijson = await api.json()
@@ -119,7 +120,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
   const comments = comment.data;
 
   let theUrl = "https://drive.google.com/uc?export=download&id=";
-  let { id } = useParams();
+
 
   let  source= theUrl+id
   
@@ -156,9 +157,10 @@ window.addEventListener('offline', () => {setIsOnline(false)});
   }
   if (content) {
     currentVideo = currentVideoPlayed.CurrentVid
-
-    if(currentVideo){
+    console.log(currentVideo)
+    if(currentVideo && currentVideo.length>0){
     init = 0 + currentVideo.Likes.length;
+    
     if (comments) {
       let commentsIds = currentVideo.CommentsIds;
       CommentsDisplay.push(actualComments);

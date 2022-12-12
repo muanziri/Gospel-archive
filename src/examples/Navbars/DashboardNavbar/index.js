@@ -84,7 +84,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
         //console.log(results);
       });
   }, []);
-  let initialUrl = window.location.href + "/VideoPlayer/";
+  let initUrl =window.location.href
+  let urlength=  new URL(initUrl).pathname.length
+  let initialUrl = window.location.href.slice(0,-urlength) + "/VideoPlayer/";
   const searchFunction = () => {
     var formData = new FormData();
     formData.append("payload", document.getElementById("myInput").value);
@@ -101,15 +103,17 @@ function DashboardNavbar({ absolute, light, isMini }) {
           contenta.forEach((element) => {
             let newLi = document.createElement("li");
             let aEl = document.createElement("a");
+            let Br = document.createElement("br");
             newLi.className = "w3-hover-white ";
-            aEl.href = initialUrl + element.VideoId;
+            aEl.href = initialUrl + element.ThumbnailId;
             aEl.innerText = element.Title;
             newLi.appendChild(aEl);
+            newLi.appendChild(Br);
 
             if (document.getElementById("myInput").value == "") {
               document.getElementById("myUL").innerHTML = "";
             } else {
-              document.getElementById("myUL").appendChild(newLi);
+              document.getElementById("myUL").insertBefore(newLi, document.getElementById("myUL").firstChild);
             }
           });
         } //{document.getElementById('myUL').innerHtml=response.map(<center> <li className="w3-hover-white "><a href={initialUrl+response.VideoId}><b>{response.Title}</b></a></li></center>)

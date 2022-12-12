@@ -46,6 +46,12 @@ window.addEventListener('offline', () => {setIsOnline(false)});
   const OpenContentModal = () => {
     document.getElementById("ContentEditor1").style.display = "block";
   };
+  async function fetchData() {
+    let api = await fetch(backendProxy+'/api/Content/'+count);
+    let apijson = await api.json()
+    setContent([...content,...apijson])
+  }
+  
   const [count, setCount] = useState(Math.floor(Math.random() * 2)+1);
   const [calculation, setCalculation] = useState(1);
   const [controller, dispatch] = useSoftUIController();
@@ -53,21 +59,31 @@ window.addEventListener('offline', () => {setIsOnline(false)});
   const [content, setContent] = useState([])
 
   const { miniSidenav} = controller;
+  setTimeout(()=>{
+    if(WindowWidth<500){
+      
+      document.getElementById('pushMessageImportantA').style.display='block'
+    }else{  
+      document.getElementById('pushMessageImportant').style.display='block'
+
+  }
+  },5000)
+  function closeModal(){
+    if(WindowWidth<500){
+      
+      document.getElementById('pushMessageImportantA').style.display='none'
+    }else{  
+      document.getElementById('pushMessageImportant').style.display='none'
+
+  }
+  }
+  
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
    useEffect(() => {
     setCount(() => count * 1);
     fetchData()
   }, [count])
-    const ChangeNegative =()=>{
-    setCalculation((c) => c - 1)
-    setCount((c) => c - 1)
-    if(count >=1)
-      {document.getElementById('pageNumber').innerHTML=calculation
-
-    }else{
-        document.getElementById('changeNegativeBtn').style.display='none'
-      }
-  }
+    
   const menuToggle =()=>{
     document.getElementById('menuToggle').style.display='block'
     document.getElementById('menuToggleButton').style.display='none'
@@ -79,11 +95,7 @@ window.addEventListener('offline', () => {setIsOnline(false)});
     document.getElementById('menuToggleClose').style.display='none'
   }
 
-  const ChangePagePositive =()=>{
-    setCalculation((c) => c + 1)
-    setCount((c) => c + 1)
-    document.getElementById('pageNumber').innerHTML=calculation;
-  }
+
   async function fetchData() {
     let api = await fetch(backendProxy+'/api/Content/'+count);
     let apijson = await api.json()
@@ -113,7 +125,48 @@ window.addEventListener('offline', () => {setIsOnline(false)});
             <Grid item xs={12} lg={5}></Grid>
           </Grid>
         </SoftBox>
+       {WindowWidth>500? <div id="pushMessageImportant" className="w3-card-4 w3-animate-right" style={{display:'none',width:"20%",position:'absolute',right:'2%',zIndex:'2'}}>
+    <header style={{backgroundColor:"#17C1E8",color:"white"}} class="w3-container ">
+    <span
+              className="w3-button w3-right w3-xlarge w3-hover-black "
+              title="Close Modal"
+              onClick={closeModal}
+            >
+              &times;
+      </span>
+      <br/>
+     <center> <h3>Support us to avoid ads on this website</h3></center>
+    </header>
+
+    <div class="w3-container w3-white">
+      <p>Take part in the existance of this platform by supporting us financially through <a href="https://www.paypal.com/donate/?hosted_button_id=XNRTS82XABVQY"><i class="fa-brands fa-paypal"></i></a> <br/> You can join us on facebook <a href="https://www.facebook.com/Gosple-Archived-107669382087314"><i class="fa-brands fa-facebook"></i></a></p>
+    </div>
+    </div>:''}
         <SoftBox mb={3}>
+        {WindowWidth<500?<div id="pushMessageImportantA" className=" w3-round w3-card-4 w3-animate-right" style={{display:'none',width:"100%",marginBottom:'2%'}}>
+    <header style={{backgroundColor:"#17C1E8",color:"white"}} class="w3-container ">
+    <span
+              className="w3-button w3-right w3-xlarge w3-hover-black "
+              title="Close Modal"
+              onClick={closeModal}
+            >
+              &times;
+      </span>
+      <br/>
+     <center> <h3>Support us to avoid ads on this website</h3></center>
+    </header>
+
+    <div class="w3-container">
+      <p>Take part in the existance of this platform by supporting us financially through <a href="https://www.paypal.com/donate/?hosted_button_id=XNRTS82XABVQY"><i class="fa-brands fa-paypal"></i></a> <br/> You can join us on facebook <a href="https://www.facebook.com/Gosple-Archived-107669382087314"><i class="fa-brands fa-facebook"></i></a></p>
+    </div>
+    </div>:''}
+    <center>
+    <div id="pushMessageImportantA" className=" w3-round w3-card-4 w3-animate-right" style={{display:'block',width:"80%",marginBottom:'2%'}}>
+    <header style={{backgroundColor:"#17C1E8",color:"white"}} class="w3-container ">
+    
+     <center> <h3>Login or Sign-up to publish your own favorite gospel content</h3></center>
+    </header>
+    </div></center>
             {content  && content.length>0 ? (
               <InfiniteScroll
               dataLength={content.length} //This is important field to render the next data
